@@ -4,7 +4,7 @@ from distutils.core import setup
 
 
 setup(
-    name = 'DjangoDBFileStorage',
+    name = 'django-db-file-storage',
     version = '0.1.0',
     author = 'Victor Oliveira da Silva',
     author_email = 'victor_o_silva@hotmail.com',
