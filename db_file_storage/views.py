@@ -23,3 +23,17 @@ def download_file(request):
     response['Content-Disposition'] = 'attachment; filename=%s' % dict_file['filename']
     return response
     
+def get_file(request):
+    name = request.GET.get('name')
+    
+    try:
+        dict_file = storage.open(name)
+    except:
+        return HttpResponseBadRequest(u'Requisição inválida.')
+    
+    response = HttpResponse(
+        FileWrapper(dict_file['file']),
+        content_type = dict_file['mimetype']
+    )
+    return response
+    
