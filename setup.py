@@ -5,7 +5,7 @@ from distutils.core import setup
 
 setup(
     name = 'django-db-file-storage',
-    version = '0.2.0',
+    version = '0.2.1',
     author = 'Victor Oliveira da Silva',
     author_email = 'victor_o_silva@hotmail.com',
     packages = ['db_file_storage', 'db_file_storage.test'],

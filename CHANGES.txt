@@ -1,1 +1,3 @@
 v0.1.0, 03-24-2013 -- Initial release.
+v0.2.0, 11-14-2013 -- Adding ability to get the image without downloading it.
+v0.2.1, 12-04-2013 -- Refactoring code and adding sphinx documentation.
