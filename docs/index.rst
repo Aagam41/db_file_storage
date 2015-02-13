@@ -20,7 +20,7 @@ Settings
 ------------------------
 
 On your project's settings, add ``'db_file_storage'`` to your
-`INSTALLED_APPS tuple <https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps>`_.
+`INSTALLED_APPS list <https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps>`_.
 
 Still on your project's settings, set `DEFAULT_FILE_STORAGE <https://docs.djangoproject.com/en/dev/ref/settings/#default-file-storage>`_ like this::
     
@@ -43,6 +43,8 @@ For each FileField you want to save, you will need a separated model to hold the
 * a ``CharField(max_length=50)`` which will hold the file's MIME type
 
 For example (in a models.py file, inside an app called 'console')::
+
+    from django.db import models
     
     class ConsolePicture(models.Model):
         bytes = models.TextField()
@@ -55,7 +57,7 @@ And the class which will have the FileField::
         name = models.CharField(max_length=100)
         picture = models.ImageField(upload_to='console.ConsolePicture/bytes/filename/mimetype', blank=True, null=True)
 
-In this example, the FileField is actually an ImageField. It's *upload_to* argument must be a string in the following format:
+In this example, the FileField is actually an ImageField. It's ``upload_to`` argument must be a string in the following format:
 
 1. the FileModel's app's name
 2. a dot (.)
@@ -73,6 +75,25 @@ Let's check it again::
     'console.ConsolePicture/bytes/filename/mimetype'
 
 Don't forget to create the necessary tables in your database, if you haven't yet.
+
+If you want stale files to be deleted when editing and deleting instances, override the ``save`` and ``delete`` methods of your model, calling ``db_file_storage.model_utils.delete_file_if_needed`` and ``db_file_storage.model_utils.delete_file`` inside them, respectively::
+
+    from db_file_storage.model_utils import delete_file, delete_file_if_needed
+    from django.db import models
+    
+    class Console(models.Model):
+        name = models.CharField(max_length=100, unique=True)
+        picture = models.ImageField(upload_to='console.ConsolePicture/bytes/filename/mimetype', blank=True, null=True)
+    
+        def save(self, *args, **kwargs):
+            delete_file_if_needed(self, 'picture')
+            super(Console, self).save(*args, **kwargs)
+    
+        def delete(self, *args, **kwargs):
+            super(Console, self).delete(*args, **kwargs)
+            delete_file(self, 'picture')
+
+Pay extra attention here to when the methods should be called. ``delete_file_if_needed`` should be called **before** the ``save`` method of the super class, and ``delete_file`` should be called **after** the ``delete`` method of the super class.
 
 Form widget
 ------------------------
@@ -93,12 +114,16 @@ Django DB File Storage comes with a custom widget to solve this problem: DBClear
             widgets = {
                 'picture': DBClearableFileInput
             }
+
+Downloading (and showing) the files
+---------------------------------------
+
+ToDo
+
     
 Code & Demo
 ========================
 
 * Package Code: https://github.com/victor-o-silva/db_file_storage
 * Demo Project: https://github.com/victor-o-silva/db_file_storage_demo
-
-
 

@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 
+# python imports
+from urllib import unquote
+
+# django imports
 from django.forms.widgets import CheckboxInput, ClearableFileInput
 from django.utils.encoding import force_unicode
 from django.utils.html import conditional_escape, escape
 from django.utils.safestring import mark_safe
-from urllib import unquote
+
 
 class DBClearableFileInput(ClearableFileInput):
     '''
@@ -23,8 +27,8 @@ class DBClearableFileInput(ClearableFileInput):
         if value and hasattr(value, "url"):
             template = self.template_with_initial
             substitutions['initial'] = (u'<a href="%s">%s</a>'
-                                        % (escape(value.url), 
-                                           escape(force_unicode(unquote(value.url.split('%2F')[-1]))))) ############ EDITED HERE
+                                        % (escape(value.url),
+                                           escape(force_unicode(unquote(value.url.split('%2F')[-1])))))  # EDITED HERE
             if not self.is_required:
                 checkbox_name = self.clear_checkbox_name(name)
                 checkbox_id = self.clear_checkbox_id(checkbox_name)
@@ -34,4 +38,3 @@ class DBClearableFileInput(ClearableFileInput):
                 substitutions['clear_template'] = self.template_with_clear % substitutions
 
         return mark_safe(template % substitutions)
-    
