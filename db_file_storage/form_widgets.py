@@ -12,7 +12,7 @@ from django.utils.safestring import mark_safe
 
 class DBClearableFileInput(ClearableFileInput):
     """
-        Editing the download link inner text.
+        Editing the download-link inner text.
     """
     def render(self, name, value, attrs=None):
         substitutions = {

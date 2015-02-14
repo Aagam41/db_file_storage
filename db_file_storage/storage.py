@@ -8,10 +8,10 @@ from urllib import urlencode
 from django.core.files.storage import Storage
 from django.core.urlresolvers import reverse
 """
-    As of Django 1.7, the utilities in django.db.models.loading are deprecated
-    (to be removed in 1.9) in favor of the the new application loading system.
-    Check here:
-        https://github.com/django/django/blob/1.7/django/db/models/loading.py
+    As of Django 1.7, the utilities in django.db.models.loading are
+      deprecated (to be removed in 1.9) in favor of the the new
+      application loading system. Check here:
+      https://github.com/django/django/blob/1.7/django/db/models/loading.py
 """
 from django import VERSION as DJ_VERSION
 if DJ_VERSION[0] <= 1 and DJ_VERSION[1] <= 6:

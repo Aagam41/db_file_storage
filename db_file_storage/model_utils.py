@@ -6,8 +6,8 @@ from db_file_storage.storage import DatabaseFileStorage
 
 def delete_file_if_needed(instance, filefield_name):
     """
-        When editing and the filefield is different from the previous one,
-        delete the previous file (if any) from the database.
+        When editing and the filefield is a new file,
+          delete the previous file (if any) from the database.
         Call this function immediately BEFORE saving the instance.
     """
     if instance.id:
@@ -27,8 +27,14 @@ def delete_file_if_needed(instance, filefield_name):
             old_file = None
 
         # If there is a file, delete it if needed
-        if old_file and old_file.name != getattr(instance, filefield_name):
-            DatabaseFileStorage().delete(old_file.name)
+        if old_file:
+            # When editing and NOT changing the file,
+            #   old_file.name == getattr(instance, filefield_name)
+            #   returns True. In this case, the file must NOT be deleted.
+            # If the file IS being changed, the comparison returns False.
+            #   In this case, the old file MUST be deleted.
+            if (old_file.name == getattr(instance, filefield_name)) is False:
+                DatabaseFileStorage().delete(old_file.name)
 
 
 def delete_file(instance, filefield_name):
