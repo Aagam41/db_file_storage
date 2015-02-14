@@ -115,12 +115,23 @@ Django DB File Storage comes with a custom widget to solve this problem: DBClear
                 'picture': DBClearableFileInput
             }
 
-Downloading (and showing) the files
+Downloading (and viewing) the files
 ---------------------------------------
 
-ToDo
+Django DB File Storage comes with views that you can use to download the files or to just view them (for images, for example). They are accessed through the `named url patterns <https://docs.djangoproject.com/en/dev/topics/http/urls/#naming-url-patterns>`_ **db_file_storage.download_file** and **db_file_storage.get_file**.
 
-    
+Both views must be passed a GET parameter named ``name``, and the value of this parameter must be the value of the filefield of the instance. The template-snippet example below must make it clearer; ``console`` is an instance of the ``Console`` model defined above::
+
+    <!-- The url used to VIEW the file: -->
+    <img src="{% url 'db_file_storage.get_file' %}?name={{ console.picture }}" />
+
+    <br/>
+
+    <!-- The url used to DOWNLOAD the file: -->
+    <a href='{% url "db_file_storage.download_file" %}?name={{ console.picture }}'>
+        <i>Click here to download the picture</i>
+    </a>
+
 Code & Demo
 ========================
 
