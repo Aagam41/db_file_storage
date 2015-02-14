@@ -8,4 +8,4 @@ Docs are here: https://github.com/victor-o-silva/db_file_storage/blob/master/doc
 
 Source is here: https://github.com/victor-o-silva/db_file_storage
 
-Demo project is here: https://github.com/victor-o-silva/db_file_storage_demo
+Demo (and test) project is here: https://github.com/victor-o-silva/db_file_storage_tests
