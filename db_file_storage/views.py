@@ -26,6 +26,7 @@ def get_file(request, add_attachment_headers):
     )
 
     if add_attachment_headers:
-        response['Content-Disposition'] = 'attachment; filename=%s' % dict_file['filename']
+        response['Content-Disposition'] = \
+            'attachment; filename=%s' % dict_file['filename']
 
     return response

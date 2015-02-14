@@ -14,10 +14,15 @@ def delete_file_if_needed(instance, filefield_name):
         model_class = instance._base_manager.model
 
         # Check if there is a file for the instance in the database
-        isnull_lookup = {'%s__isnull' % filefield_name: True}
-        isempty_lookup = {'%s__exact' % filefield_name: ''}
-        if model_class.objects.filter(pk=instance.pk).exclude(**isnull_lookup).exclude(**isempty_lookup).exists():
-            old_file = getattr(model_class.objects.only(filefield_name).get(pk=instance.id), filefield_name)
+        if model_class.objects.filter(pk=instance.pk).exclude(
+            **{'%s__isnull' % filefield_name: True}
+        ).exclude(
+            **{'%s__exact' % filefield_name: ''}
+        ).exists():
+            old_file = getattr(
+                model_class.objects.only(filefield_name).get(pk=instance.id),
+                filefield_name
+            )
         else:
             old_file = None
 
