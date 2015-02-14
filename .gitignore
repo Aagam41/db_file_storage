@@ -1,10 +1,9 @@
 *~
 *.pyc
 *.pyo
-.project
-.pydevproject
-.settings
 docs/Makefile
 docs/_build/*
 docs/_static/*
 docs/_templates/*
+MANIFEST
+dist/*
