@@ -136,5 +136,5 @@ Code & Demo
 ========================
 
 * Package Code: https://github.com/victor-o-silva/db_file_storage
-* Demo Project: https://github.com/victor-o-silva/db_file_storage_demo
+* Demo (and Test) Project: https://github.com/victor-o-silva/db_file_storage_tests
 
