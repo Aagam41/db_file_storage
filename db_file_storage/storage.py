@@ -39,7 +39,7 @@ def _get_file_from_encoded_bytes(encoded_bytes):
 def _get_unique_filename(model_class, filename_field, filename):
     final_name = filename
 
-    if ('.' in final_name):
+    if ('.' in filename.rsplit('/', 1)[-1]):
         stem, extension = final_name.rsplit('.', 1)
     else:
         stem, extension = (final_name, '')

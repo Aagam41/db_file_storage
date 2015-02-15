@@ -3,3 +3,4 @@ v0.2.0, 11-14-2013 -- Adding ability to get the image without downloading it.
 v0.2.1, 12-04-2013 -- Refactoring code and adding sphinx documentation.
 v0.2.2, 02-14-2015 -- Applying pep-8 rules, adding delete_file functions, documenting previously undocumented views.
 v0.2.5, 02-14-2015 -- Linking to the demo/tests project.
+v0.2.5, 02-14-2015 -- Adjustment in _get_unique_filename function.
