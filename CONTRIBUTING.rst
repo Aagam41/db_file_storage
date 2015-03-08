@@ -1,6 +1,6 @@
-==============================
+===============================
 Contributing to db_file_storage
-==============================
+===============================
 
 Issues reporting and pull requests are welcome!
 
