@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 # python imports
-from cStringIO import StringIO
 from urllib import urlencode
 
 # django imports
+from django.core.files.base import ContentFile
 from django.core.files.storage import Storage
 from django.core.urlresolvers import reverse
 """
@@ -26,14 +26,14 @@ def _get_model_class(model_class_path):
     return get_model(app_label, model_name)
 
 
-def _get_encoded_bytes_from_file(file):
-    file.seek(0)
-    return file.read().encode('base64')
+def _get_encoded_bytes_from_file(_file):
+    _file.seek(0)
+    return _file.read().encode('base64')
 
 
 def _get_file_from_encoded_bytes(encoded_bytes):
     file_buffer = str(encoded_bytes).decode('base64')
-    return StringIO(file_buffer)
+    return ContentFile(file_buffer)
 
 
 def _get_unique_filename(model_class, filename_field, filename):
@@ -64,12 +64,10 @@ class DatabaseFileStorage(Storage):
             content_field, mimetype_field
         ).get(**{filename_field: name})
         encoded_bytes = getattr(model_instance, content_field)
-
-        return {
-            'filename': filename,
-            'file': _get_file_from_encoded_bytes(encoded_bytes),
-            'mimetype': getattr(model_instance, mimetype_field)
-        }
+        _file = _get_file_from_encoded_bytes(encoded_bytes)
+        _file.filename = filename
+        _file.mimetype = getattr(model_instance, mimetype_field)
+        return _file
 
     def _save(self, name, content):
         (model_class_path, content_field, filename_field,
@@ -77,7 +75,7 @@ class DatabaseFileStorage(Storage):
         model_class = _get_model_class(model_class_path)
         new_filename = _get_unique_filename(model_class, filename_field, name)
         encoded_bytes = _get_encoded_bytes_from_file(content)
-        mimetype = content.file.content_type
+        mimetype = getattr(content.file, 'content_type', 'text/plain')
         model_class.objects.create(**{
             content_field: encoded_bytes,
             filename_field: new_filename,

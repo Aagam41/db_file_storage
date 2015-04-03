@@ -4,3 +4,4 @@ v0.2.1, 12-04-2013 -- Refactoring code and adding sphinx documentation.
 v0.2.2, 02-14-2015 -- Applying pep-8 rules, adding delete_file functions, documenting previously undocumented views.
 v0.2.5, 02-14-2015 -- Linking to the demo/tests project.
 v0.2.5, 02-14-2015 -- Adjustment in _get_unique_filename function.
+v0.2.7, 04-02-2015 -- Adjustment so files can be saved/retrieved without using ModelForms.
