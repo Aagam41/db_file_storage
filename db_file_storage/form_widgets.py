@@ -4,51 +4,48 @@
 from urllib import unquote
 
 # django imports
-from django.forms.widgets import CheckboxInput, ClearableFileInput
-from django.utils.encoding import force_unicode
-from django.utils.html import conditional_escape, escape
-from django.utils.safestring import mark_safe
+from django import VERSION
+from django.utils.encoding import force_unicode, force_text, python_2_unicode_compatible
+from django.utils.html import escape
+from django.forms.widgets import ClearableFileInput
+from django.contrib.admin.widgets import AdminFileWidget
 
 
-class DBClearableFileInput(ClearableFileInput):
+def db_file_widget(cls):
     """
         Editing the download-link inner text.
     """
-    def render(self, name, value, attrs=None):
-        substitutions = {
-            'initial_text': self.initial_text,
-            'input_text': self.input_text,
-            'clear_template': '',
-            'clear_checkbox_label': self.clear_checkbox_label,
-        }
-        template = u'%(input)s'
-        substitutions['input'] = super(ClearableFileInput, self).render(
-            name, value, attrs
-        )
+    if VERSION >= (1, 8, 0, '', 0):
+        def get_template_substitution_values(self, value):
+            subst = super(cls, self).get_template_substitution_values(value)
+            subst['initial'] = escape(force_unicode(unquote(value.url.split('%2F')[-1])))
+            return subst
+        setattr(cls, 'get_template_substitution_values', get_template_substitution_values)
+    else:
+        def render(self, name, value, attrs=None):
+            if hasattr(value, 'url'):
+                @python_2_unicode_compatible
+                class FakeValue:
+                    def __init__(self2, value):
+                        self2.name = value.name.split('/')[-1]
+                        self2.url = value.url
 
-        if value and hasattr(value, "url"):
-            template = self.template_with_initial
-            substitutions['initial'] = u'<a href="%s">%s</a>' % (
-                escape(value.url),
-                escape(
-                    force_unicode(
-                        unquote(
-                            value.url.split('%2F')[-1]  # <-- EDITED HERE
-                        )
-                    )
-                )
-            )
-            if not self.is_required:
-                checkbox_name = self.clear_checkbox_name(name)
-                checkbox_id = self.clear_checkbox_id(checkbox_name)
-                substitutions['clear_checkbox_name'] = \
-                    conditional_escape(checkbox_name)
-                substitutions['clear_checkbox_id'] = \
-                    conditional_escape(checkbox_id)
-                substitutions['clear'] = CheckboxInput().render(
-                    checkbox_name, False, attrs={'id': checkbox_id}
-                )
-                substitutions['clear_template'] = \
-                    self.template_with_clear % substitutions
+                    def __str__(self2):
+                        return self2.name
 
-        return mark_safe(template % substitutions)
+            else:
+                def FakeValue(value):
+                    return value
+            return super(cls, self).render(name, FakeValue(value), attrs)
+        setattr(cls, 'render', render)
+    return cls
+
+
+@db_file_widget
+class DBClearableFileInput(ClearableFileInput):
+    pass
+
+
+@db_file_widget
+class DBAdminClearableFileInput(AdminFileWidget):
+    pass
