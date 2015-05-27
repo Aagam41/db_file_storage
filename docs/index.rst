@@ -108,13 +108,35 @@ Django DB File Storage comes with a custom widget to solve this problem: DBClear
     from db_file_storage.form_widgets import DBClearableFileInput
     from django import forms
     
-    class FormConsole(forms.ModelForm):
+    class ConsoleForm(forms.ModelForm):
         class Meta:
             model = Console
+            exclude = []
             widgets = {
                 'picture': DBClearableFileInput
             }
 
+Admin Form widget
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+In order to solve the same problem in the `Django Admin <https://docs.djangoproject.com/en/dev/ref/contrib/admin/>`_ interface, Django DB File Storage comes with another custom widget: DBAdminClearableFileInput. You just need to use it when defining your form class, and then `use such form when defining your ModelAdmin class <https://docs.djangoproject.com/en/dev/ref/contrib/admin/#django.contrib.admin.ModelAdmin.form>`_ inside your ``admin.py`` file::
+    
+    from console.models import Console
+    from db_file_storage.form_widgets import DBAdminClearableFileInput
+    from django import forms
+    from django.contrib import admin
+    
+    class ConsoleForm(forms.ModelForm):
+        class Meta:
+            model = Console
+            exclude = []
+            widgets = {
+                'picture': DBAdminClearableFileInput
+            }
+    
+    class ConsoleAdmin(admin.ModelAdmin):
+        form = ConsoleForm
+        
 Downloading (and viewing) the files
 ---------------------------------------
 
@@ -137,4 +159,3 @@ Code & Demo
 
 * Package Code: https://github.com/victor-o-silva/db_file_storage
 * Demo (and Test) Project: https://github.com/victor-o-silva/db_file_storage_tests
-
