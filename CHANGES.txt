@@ -6,3 +6,4 @@ v0.2.5, 02-14-2015 -- Linking to the demo/tests project.
 v0.2.5, 02-14-2015 -- Adjustment in _get_unique_filename function.
 v0.2.7, 04-02-2015 -- Adjustment so files can be saved/retrieved without using ModelForms.
 v0.2.9, 05-27-2015 -- Refactoring of widgets code and adding widget for the Django Admin; some pep-8 corrections.
+v0.2.10, 06-13-2015 -- Putting demo/test project inside the main repo, updating documentation files.
