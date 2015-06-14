@@ -1,0 +1,52 @@
+<style>
+    table {
+        width: 100%;
+    }
+    table td {
+        text-align: center;
+        border-bottom: 1px solid black;
+    }
+</style>
+
+<a href='{% url "cd.add" %}'>Add CD</a>
+
+<hr />
+
+{% if object_list %}
+    <table>
+        {% for obj in object_list %}
+            <tr>
+                <td>
+                    <a href='{{ obj.get_absolute_url }}'>{{ obj.pk }}</a>
+                </td>
+                <td>
+                    <a href='{{ obj.get_absolute_url }}'>{{ obj }}</a>
+                </td>
+                <td>
+                    {% if obj.cover %}
+                        <a href='{% url "db_file_storage.get_file" %}?name={{ obj.cover }}' target='_blank'>
+                            <img height=64 width=64 src="{% url 'db_file_storage.get_file' %}?name={{ obj.cover }}" />
+                        </a>
+                        <br/>
+                        <a href='{% url "db_file_storage.download_file" %}?name={{ obj.cover }}'>
+                            <i>Download</i>
+                        </a>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if obj.disc %}
+                        <a href='{% url "db_file_storage.get_file" %}?name={{ obj.disc }}' target='_blank'>
+                            <img height=64 width=64 src="{% url 'db_file_storage.get_file' %}?name={{ obj.disc }}" />
+                        </a>
+                        <br/>
+                        <a href='{% url "db_file_storage.download_file" %}?name={{ obj.disc }}'>
+                            <i>Download</i>
+                        </a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <p>No items found.</p>
+{% endif %}

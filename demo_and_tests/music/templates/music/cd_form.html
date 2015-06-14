@@ -1,0 +1,17 @@
+<form method='post' {% if form.is_multipart %}enctype='multipart/form-data'{% endif %}>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <p>
+        <input type='submit' />
+    </p>
+</form>
+{% if form.instance.pk %}
+    <hr/>
+    <div align='center'>
+        <a href='{% url "cd.delete" pk=form.instance.pk %}'>Delete</a>
+    </div>
+{% endif %}
+<hr/>
+<div align='center'>
+    <a href='{% url "cd.list" %}'>Back to list</a>
+</div>

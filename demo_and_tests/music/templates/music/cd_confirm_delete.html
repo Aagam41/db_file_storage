@@ -1,0 +1,9 @@
+<form method='post'>
+    {% csrf_token %}
+    <p>Are you sure you want to delete "{{ object }}"?</p>
+    <input type='submit' value='Confirm' />
+</form>
+<hr/>
+<div align='center'>
+    <a href='{% url "cd.list" %}'>Back to list</a>
+</div>
