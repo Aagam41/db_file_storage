@@ -46,7 +46,7 @@ def db_file_widget(cls):
         )
     else:
         def render(self, name, value, attrs=None):
-            if hasattr(value, 'url'):
+            if value and hasattr(value, 'url'):
                 render_value = FakeValue(value)
             else:
                 render_value = value
