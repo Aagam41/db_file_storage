@@ -1,4 +1,4 @@
-strictness: veryhigh
+strictness: high
 pep8:
     full: true
 uses:
