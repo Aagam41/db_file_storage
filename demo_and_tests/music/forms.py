@@ -3,7 +3,8 @@ from django import forms
 from django.contrib.admin.forms import forms as adminforms
 
 # third party imports
-from db_file_storage.form_widgets import DBClearableFileInput, DBAdminClearableFileInput
+from db_file_storage.form_widgets import DBClearableFileInput, \
+    DBAdminClearableFileInput
 
 # project imports
 from music.models import CD

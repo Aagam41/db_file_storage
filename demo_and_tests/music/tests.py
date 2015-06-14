@@ -463,7 +463,11 @@ class AddEditAndDeleteCDsTests(TestCase):
 
         saved_sound_device = SoundDevice.objects.get(id=sound_device_id)
         saved_sound_device.instruction_manual.open('r')
-        saved_sound_device_file_content_string = saved_sound_device.instruction_manual.read()
+        saved_sound_device_file_content_string = \
+            saved_sound_device.instruction_manual.read()
         saved_sound_device.instruction_manual.close()
 
-        self.assertEqual(file_content_string, saved_sound_device_file_content_string)
+        self.assertEqual(
+            file_content_string,
+            saved_sound_device_file_content_string
+        )
