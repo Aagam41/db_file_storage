@@ -1,11 +1,12 @@
-v0.1.0, 03-24-2013 -- Initial release.
-v0.2.0, 11-14-2013 -- Adding ability to get the image without downloading it.
-v0.2.1, 12-04-2013 -- Refactoring code and adding sphinx documentation.
-v0.2.2, 02-14-2015 -- Applying pep-8 rules, adding delete_file functions, documenting previously undocumented views.
-v0.2.5, 02-14-2015 -- Linking to the demo/tests project.
-v0.2.5, 02-14-2015 -- Adjustment in _get_unique_filename function.
-v0.2.7, 04-02-2015 -- Adjustment so files can be saved/retrieved without using ModelForms.
-v0.2.9, 05-27-2015 -- Refactoring of widgets code and adding widget for the Django Admin; some pep-8 corrections.
+v0.1.0,  03-24-2013 -- Initial release.
+v0.2.0,  11-14-2013 -- Adding ability to get the image without downloading it.
+v0.2.1,  12-04-2013 -- Refactoring code and adding sphinx documentation.
+v0.2.2,  02-14-2015 -- Applying pep-8 rules, adding delete_file functions, documenting previously undocumented views.
+v0.2.5,  02-14-2015 -- Linking to the demo/tests project.
+v0.2.5,  02-14-2015 -- Adjustment in _get_unique_filename function.
+v0.2.7,  04-02-2015 -- Adjustment so files can be saved/retrieved without using ModelForms.
+v0.2.9,  05-27-2015 -- Refactoring of widgets code and adding widget for the Django Admin; some pep-8 corrections.
 v0.2.10, 06-13-2015 -- Putting demo/test project inside the main repo, updating documentation files.
 v0.2.11, 06-14-2015 -- Python3 compatibility
 v0.2.12, 06-14-2015 -- Showing Build Status and Code Health on the README
+v0.3.0,  06-14-2015 -- Test suite (passing) for Python (2.7, 3.3, 3.4) and Django (1.6, 1.7, 1.8)
