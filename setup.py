@@ -2,6 +2,7 @@
 
 from distutils.core import setup
 
+readme_file = open('README.rst')
 
 setup(
     name='django-db-file-storage',
@@ -15,8 +16,10 @@ setup(
     license='GNU GPL v3',
     description="Custom FILE_STORAGE for Django. Saves model's filefields "
                 "in your database instead of your file system.",
-    long_description=open('README.txt').read(),
+    long_description=readme_file.read(),
     install_requires=[
         "Django",
     ],
 )
+
+readme_file.close()
