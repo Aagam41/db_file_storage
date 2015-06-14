@@ -108,7 +108,7 @@ Form widget
 
 At this point, your project already must be saving files in the database when you use Django's ModelForms.
 
-However, due to Django DB File Storage's internal logic, Django's default widget for file inputs won't show the proper filename when downloading uploaded files. The download itself works perfectly, it's just the widget that doesn't show the correct name in it's download link.
+However, due to Django DB File Storage's internal logic, Django's default widget for file inputs won't show the proper filename when downloading uploaded files. The download itself works perfectly, it's just the widget that doesn't show the correct name in its download link.
 
 Django DB File Storage comes with a custom widget to solve this problem: DBClearableFileInput. You just need to use it when defining your form class::
     
