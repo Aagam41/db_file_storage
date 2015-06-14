@@ -15,7 +15,7 @@ sys.path.append(DB_FILE_STORAGE_PATH)
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-SECRET_KEY = get_random_string(50, string.letters + string.digits)
+SECRET_KEY = get_random_string(50, string.ascii_letters + string.digits)
 ROOT_URLCONF = 'demo_project.urls'
 WSGI_APPLICATION = 'demo_project.wsgi.application'
 
