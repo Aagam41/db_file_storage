@@ -15,8 +15,13 @@ Code from pull requests should do the same.
 Tests
 ------------------------------
 
-The automated tests for the package are in the
-`db_file_storage_tests <https://github.com/victor-o-silva/db_file_storage_tests>`_ project.
+The project with db_file_storage's automated tests is in the
+`demo_and_tests <https://github.com/victor-o-silva/db_file_storage/tree/master/demo_and_tests>`_ directory. The test suite is located in the `tests.py <https://github.com/victor-o-silva/db_file_storage/blob/master/demo_and_tests/music/tests.py>`_ file inside the ``music`` app's directory.
 
-Before creating a pull request, make sure that all tests still pass, and add/expand tests for
-your changes if needed.
+Before creating a pull request, add/expand tests for your changes if needed and make sure that all tests are passing.
+
+In order to test your branch of db_file_storage, you'll have to
+
+#. ``cd`` into the ``demo_and_tests`` directory,
+#. `pip install <https://pypi.python.org/pypi/pip>`_ all the libraries specified in the `requirements file <https://github.com/victor-o-silva/db_file_storage/blob/master/demo_and_tests/requirements.txt>`_ in your environment (you might want to create and use a `virtual environment <http://docs.python-guide.org/en/latest/dev/virtualenvs/>`_),
+#. run ``python manage test`` from your shell.

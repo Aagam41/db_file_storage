@@ -154,8 +154,18 @@ Both views must be passed a GET parameter named ``name``, and the value of this 
         <i>Click here to download the picture</i>
     </a>
 
-Code & Demo
+Demo
 ========================
 
-* Package Code: https://github.com/victor-o-silva/db_file_storage
-* Demo (and Test) Project: https://github.com/victor-o-silva/db_file_storage_tests
+In order to run the demo project, just
+
+#. download the project and ``cd`` into it,
+#. ``cd`` into the ``demo_and_tests`` directory,
+#. `pip install <https://pypi.python.org/pypi/pip>`_ all the libraries specified in the `requirements file <https://github.com/victor-o-silva/db_file_storage/blob/master/demo_and_tests/requirements.txt>`_ in your environment (you might want to create and use a `virtual environment <http://docs.python-guide.org/en/latest/dev/virtualenvs/>`_),
+#. run ``python manage syncdb`` and ``python manage runserver`` from your shell and
+#. visit `http://localhost:8000 <http://localhost:8000>`_ in your browser.
+
+Tests & Contributing
+========================
+
+In order to run the tests and contribute to db_file_storage, check the instructions in the `CONTRIBUTING file <https://github.com/victor-o-silva/db_file_storage/blob/master/CONTRIBUTING.rst>`_.
