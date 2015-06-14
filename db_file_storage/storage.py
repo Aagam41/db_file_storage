@@ -5,6 +5,7 @@ import base64
 import sys
 
 # django imports
+from django import VERSION as DJ_VERSION
 from django.core.files.base import ContentFile
 from django.core.files.storage import Storage
 from django.core.urlresolvers import reverse
@@ -18,7 +19,6 @@ else:  # python3
 # deprecated (to be removed in 1.9) in favor of the the new
 # application loading system. Check here:
 # https://github.com/django/django/blob/1.7/django/db/models/loading.py
-from django import VERSION as DJ_VERSION
 if DJ_VERSION[0] <= 1 and DJ_VERSION[1] <= 6:
     from django.db.models.loading import get_model
 else:
