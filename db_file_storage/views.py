@@ -17,7 +17,7 @@ def get_file(request, add_attachment_headers):
 
     try:
         _file = storage.open(name)
-    except:
+    except Exception:
         return HttpResponseBadRequest(_('Invalid request'))
 
     response = HttpResponse(

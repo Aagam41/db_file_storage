@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import os
+import string
 import sys
+from django.utils.crypto import get_random_string
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -13,7 +15,7 @@ sys.path.append(DB_FILE_STORAGE_PATH)
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-SECRET_KEY = 'cj33louyit#jhcq%it)swv_(*_b$q%jv5%d8s-hjj#=l=swi^y'
+SECRET_KEY = get_random_string(50, string.ascii_letters + string.digits)
 ROOT_URLCONF = 'demo_project.urls'
 WSGI_APPLICATION = 'demo_project.wsgi.application'
 
