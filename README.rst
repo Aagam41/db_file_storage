@@ -1,3 +1,6 @@
+.. image:: https://travis-ci.org/victor-o-silva/db_file_storage.svg?branch=master
+    :target: https://travis-ci.org/victor-o-silva/db_file_storage
+
 ========================
 django-db-file-storage
 ========================
