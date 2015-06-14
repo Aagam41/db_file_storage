@@ -8,6 +8,13 @@ env:
     - DJANGO="django==1.6"
     - DJANGO="django==1.7"
     - DJANGO="django==1.8"
-install: "pip install Pillow && pip install $DJANGO"
-before_script: cd demo_and_tests
-script: python manage.py test
+install:
+    - pip install Pillow
+    - pip install $DJANGO
+    - pip install coveralls
+before_script:
+    cd demo_and_tests
+script:
+    coverage run --source=db_file_storage manage.py test
+after_success:
+    coveralls
