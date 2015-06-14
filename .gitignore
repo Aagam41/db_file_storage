@@ -60,3 +60,6 @@ target/
 
 # Database
 database.db
+
+# PyEnv
+.python-version
