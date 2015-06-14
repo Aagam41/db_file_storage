@@ -3,7 +3,7 @@
 # python imports
 import base64
 import sys
-if sys.version_info[0] == 2:  # python2
+if sys.version_info.major == 2:  # python2
     from urllib import urlencode
 else:  # python3
     from urllib.parse import urlencode

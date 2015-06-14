@@ -4,7 +4,7 @@
 import mimetypes
 import os
 import sys
-if sys.version_info[0] == 2:  # python2
+if sys.version_info.major == 2:  # python2
     from urllib import urlencode
 else:  # python3
     from urllib.parse import urlencode
@@ -460,7 +460,7 @@ class AddEditAndDeleteCDsTests(TestCase):
 
     def test_save_file_without_using_form(self):
         file_name = 'manual.txt'
-        if sys.version_info[0] == 2:  # python3
+        if sys.version_info.major == 2:  # python2
             file_content_string = 'Test file content'
         else:  # python3
             file_content_string = b'Test file content'
@@ -484,7 +484,7 @@ class AddEditAndDeleteCDsTests(TestCase):
 
     def test_save_file_without_using_form_with_accents(self):
         file_name = 'manual.txt'
-        if sys.version_info[0] == 2:  # python3
+        if sys.version_info.major == 2:  # python2
             file_content_string = 'Test file content with accents: áãüí'
         else:  # python3
             file_content_string = \

@@ -2,7 +2,7 @@
 
 # python imports
 import sys
-if sys.version_info[0] == 2:  # python2
+if sys.version_info.major == 2:  # python2
     from urllib import unquote
 else:  # python3
     from urllib.parse import unquote
@@ -33,7 +33,7 @@ def db_file_widget(cls):
         def get_template_substitution_values(self, value):
             subst = super(cls, self).get_template_substitution_values(value)
             unquoted = unquote(value.url.split('%2F')[-1])
-            if sys.version_info[0] == 2:  # python 2
+            if sys.version_info.major == 2:  # python 2
                 from django.utils.encoding import force_unicode
                 unquoted = force_unicode(unquoted)
             subst['initial'] = escape(unquoted)
