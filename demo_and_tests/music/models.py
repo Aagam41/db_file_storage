@@ -11,11 +11,17 @@ class CDDisc(models.Model):
     filename = models.CharField(max_length=255)
     mimetype = models.CharField(max_length=50)
 
+    def __unicode__(self):
+        return self.filename
+
 
 class CDCover(models.Model):
     bytes = models.TextField()
     filename = models.CharField(max_length=255)
     mimetype = models.CharField(max_length=50)
+
+    def __unicode__(self):
+        return self.filename
 
 
 class CD(models.Model):
@@ -53,6 +59,9 @@ class SoundDeviceInstructionManual(models.Model):
     filename = models.CharField(max_length=255)
     mimetype = models.CharField(max_length=50)
 
+    def __unicode__(self):
+        return self.filename
+
 
 class SoundDevice(models.Model):
     name = models.CharField(max_length=100)
@@ -61,3 +70,6 @@ class SoundDevice(models.Model):
         blank=True,
         null=True
     )
+
+    def __unicode__(self):
+        return self.name
