@@ -1,5 +1,10 @@
 .. image:: https://travis-ci.org/victor-o-silva/db_file_storage.svg?branch=master
-    :target: https://travis-ci.org/victor-o-silva/db_file_storage
+   :target: https://travis-ci.org/victor-o-silva/db_file_storage
+   :alt: Build Status
+
+.. image:: https://landscape.io/github/victor-o-silva/db_file_storage/master/landscape.svg?style=flat
+   :target: https://landscape.io/github/victor-o-silva/db_file_storage/master
+   :alt: Code Health
 
 ========================
 django-db-file-storage
