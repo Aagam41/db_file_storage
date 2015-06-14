@@ -12,7 +12,7 @@ django-db-file-storage
 
 Django DB File Storage is a custom
 `file storage system <https://docs.djangoproject.com/en/dev/topics/files/#file-storage>`_
-for Django. Use it to save your models' FileFields in your database instead of your file system.
+for Django. Use it to save your models' FileFields in your database instead of your file system. Supports Python versions ``2.7``, ``3.3`` and ``3.4``, and Django versions ``1.6``, ``1.7`` and ``1.8``.
 
 How to use
 ========================
