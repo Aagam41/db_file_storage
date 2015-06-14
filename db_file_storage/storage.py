@@ -3,15 +3,16 @@
 # python imports
 import base64
 import sys
-if sys.version_info.major == 2:  # python2
-    from urllib import urlencode
-else:  # python3
-    from urllib.parse import urlencode
 
 # django imports
 from django.core.files.base import ContentFile
 from django.core.files.storage import Storage
 from django.core.urlresolvers import reverse
+
+if sys.version_info.major == 2:  # python2
+    from urllib import urlencode
+else:  # python3
+    from urllib.parse import urlencode
 
 # As of Django 1.7, the utilities in django.db.models.loading are
 # deprecated (to be removed in 1.9) in favor of the the new

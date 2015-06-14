@@ -4,7 +4,8 @@
 from django.conf.urls import patterns, url
 
 
-urlpatterns = patterns('db_file_storage',
+urlpatterns = patterns(
+    'db_file_storage',
     url(
         r'^download/',
         'views.get_file',
