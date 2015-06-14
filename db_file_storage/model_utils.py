@@ -11,7 +11,7 @@ def delete_file_if_needed(instance, filefield_name):
         Call this function immediately BEFORE saving the instance.
     """
     if instance.id:
-        model_class = instance._base_manager.model
+        model_class = type(instance)
 
         # Check if there is a file for the instance in the database
         if model_class.objects.filter(pk=instance.pk).exclude(

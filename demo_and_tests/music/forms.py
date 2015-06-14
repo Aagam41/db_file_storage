@@ -11,7 +11,7 @@ from music.models import CD, SoundDevice
 
 
 class CDForm(forms.ModelForm):
-    class Meta:
+    class Meta(object):
         model = CD
         exclude = []
         widgets = {
@@ -21,7 +21,7 @@ class CDForm(forms.ModelForm):
 
 
 class CDAdminForm(adminforms.ModelForm):
-    class Meta:
+    class Meta(object):
         model = CD
         exclude = []
         widgets = {
@@ -31,6 +31,6 @@ class CDAdminForm(adminforms.ModelForm):
 
 
 class SoundDeviceForm(forms.ModelForm):
-    class Meta:
+    class Meta(object):
         model = SoundDevice
         exclude = []

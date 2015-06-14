@@ -16,7 +16,7 @@ from django.contrib.admin.widgets import AdminFileWidget
 
 
 @python_2_unicode_compatible
-class FakeValue:
+class FakeValue(object):
     def __init__(self, value):
         self.name = value.name.split('/')[-1]
         self.url = value.url
