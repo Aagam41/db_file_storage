@@ -1,7 +1,13 @@
 language: python
 python:
     - "2.7"
+    - "3.2"
+    - "3.3"
     - "3.4"
-before_install: cd demo_and_tests
-install: "pip install -r requirements.txt"
+env:
+    - DJANGO="django==1.6"
+    - DJANGO="django==1.7"
+    - DJANGO="django==1.8"
+install: "pip install Pillow && pip install $DJANGO"
+before_script: cd demo_and_tests
 script: python manage.py test
