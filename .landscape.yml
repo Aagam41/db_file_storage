@@ -1,0 +1,5 @@
+strictness: veryhigh
+pep8:
+    full: true
+uses:
+    - django
