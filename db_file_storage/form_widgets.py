@@ -2,10 +2,6 @@
 
 # python imports
 import sys
-if sys.version_info.major == 2:  # python2
-    from urllib import unquote
-else:  # python3
-    from urllib.parse import unquote
 
 # django imports
 from django import VERSION as DJ_VERSION
@@ -13,6 +9,11 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.html import escape
 from django.forms.widgets import ClearableFileInput
 from django.contrib.admin.widgets import AdminFileWidget
+
+if sys.version_info.major == 2:  # python2
+    from urllib import unquote
+else:  # python3
+    from urllib.parse import unquote
 
 
 @python_2_unicode_compatible

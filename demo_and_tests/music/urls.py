@@ -9,7 +9,8 @@ from .forms import CDForm, SoundDeviceForm
 from .models import CD, SoundDevice
 
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
     url(
         r'^$',
         ListView.as_view(
