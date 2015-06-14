@@ -7,7 +7,7 @@ from db_file_storage.form_widgets import DBClearableFileInput, \
     DBAdminClearableFileInput
 
 # project imports
-from music.models import CD
+from music.models import CD, SoundDevice
 
 
 class CDForm(forms.ModelForm):
@@ -28,3 +28,9 @@ class CDAdminForm(adminforms.ModelForm):
             'disc': DBAdminClearableFileInput,
             'cover': DBAdminClearableFileInput,
         }
+
+
+class SoundDeviceForm(forms.ModelForm):
+    class Meta:
+        model = SoundDevice
+        exclude = []

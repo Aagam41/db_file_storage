@@ -5,8 +5,8 @@ from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 # project imports
-from .forms import CDForm
-from .models import CD
+from .forms import CDForm, SoundDeviceForm
+from .models import CD, SoundDevice
 
 
 urlpatterns = patterns('',
@@ -19,7 +19,7 @@ urlpatterns = patterns('',
         name='cd.list'
     ),
     url(
-        r'^add/$',
+        r'^cds/add/$',
         CreateView.as_view(
             model=CD,
             form_class=CDForm,
@@ -29,7 +29,7 @@ urlpatterns = patterns('',
         name='cd.add'
     ),
     url(
-        r'^edit/(?P<pk>\d+)/$',
+        r'^cds/edit/(?P<pk>\d+)/$',
         UpdateView.as_view(
             model=CD,
             form_class=CDForm,
@@ -39,11 +39,21 @@ urlpatterns = patterns('',
         name='cd.edit'
     ),
     url(
-        r'^delete/(?P<pk>\d+)/$',
+        r'^cds/delete/(?P<pk>\d+)/$',
         DeleteView.as_view(
             model=CD,
             success_url=reverse_lazy('cd.list')
         ),
         name='cd.delete'
+    ),
+    url(
+        r'^sound_devices/add/$',
+        CreateView.as_view(
+            model=SoundDevice,
+            form_class=SoundDeviceForm,
+            template_name='music/sound_device_form.html',
+            success_url=reverse_lazy('cd.list')
+        ),
+        name='sound_device.add'
     ),
 )
