@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
 
 # python imports
-from urllib import urlencode
+import base64
+import sys
+if sys.version_info[0] == 2:  # python2
+    from urllib import urlencode
+else:  # python3
+    from urllib.parse import urlencode
 
 # django imports
 from django.core.files.base import ContentFile
@@ -28,11 +33,12 @@ def _get_model_class(model_class_path):
 
 def _get_encoded_bytes_from_file(_file):
     _file.seek(0)
-    return _file.read().encode('base64')
+    file_content = _file.read()
+    return base64.b64encode(file_content)
 
 
 def _get_file_from_encoded_bytes(encoded_bytes):
-    file_buffer = str(encoded_bytes).decode('base64')
+    file_buffer = base64.b64decode(encoded_bytes)
     return ContentFile(file_buffer)
 
 

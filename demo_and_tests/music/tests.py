@@ -1,7 +1,13 @@
+# -*- coding: utf-8 -*-
+
 # python imports
 import mimetypes
 import os
-from urllib import urlencode
+import sys
+if sys.version_info[0] == 2:  # python2
+    from urllib import urlencode
+else:  # python3
+    from urllib.parse import urlencode
 
 # django imports
 from django.conf import settings
@@ -28,6 +34,7 @@ CDS_DATA = {
         'disc2_path': os.path.join(settings.TEST_FILES_DIR, 'gh_disc2.jpg'),
     },
 }
+TEXT_FILE_PATH = os.path.join(settings.TEST_FILES_DIR, 'o_bicho.txt')
 
 
 def get_cd(cd_key):
@@ -453,21 +460,71 @@ class AddEditAndDeleteCDsTests(TestCase):
 
     def test_save_file_without_using_form(self):
         file_name = 'manual.txt'
-        file_content_string = 'Test file content'
+        if sys.version_info[0] == 2:  # python3
+            file_content_string = 'Test file content'
+        else:  # python3
+            file_content_string = b'Test file content'
         file_content = ContentFile(file_content_string)
 
-        sound_device = SoundDevice(name='BXPM 778')
-        sound_device.instruction_manual.save(file_name, file_content)
-        sound_device.save()
-        sound_device_id = sound_device.id
+        device = SoundDevice(name='BXPM 778')
+        device.instruction_manual.save(file_name, file_content)
+        device.save()
+        device_id = device.id
 
-        saved_sound_device = SoundDevice.objects.get(id=sound_device_id)
-        saved_sound_device.instruction_manual.open('r')
-        saved_sound_device_file_content_string = \
-            saved_sound_device.instruction_manual.read()
-        saved_sound_device.instruction_manual.close()
+        saved_device = SoundDevice.objects.get(id=device_id)
+        saved_device.instruction_manual.open('r')
+        saved_device_file_content_string = \
+            saved_device.instruction_manual.read()
+        saved_device.instruction_manual.close()
 
         self.assertEqual(
             file_content_string,
-            saved_sound_device_file_content_string
+            saved_device_file_content_string
+        )
+
+    def test_save_file_without_using_form_with_accents(self):
+        file_name = 'manual.txt'
+        if sys.version_info[0] == 2:  # python3
+            file_content_string = 'Test file content with accents: áãüí'
+        else:  # python3
+            file_content_string = \
+                bytearray('Test file content with accents: áãüí', 'utf-8')
+        file_content = ContentFile(file_content_string)
+
+        device = SoundDevice(name='BXPM 778')
+        device.instruction_manual.save(file_name, file_content)
+        device.save()
+
+        saved_device = SoundDevice.objects.get()
+        saved_device.instruction_manual.open('r')
+        saved_device_file_content_string = \
+            saved_device.instruction_manual.read()
+        saved_device.instruction_manual.close()
+
+        self.assertEqual(
+            file_content_string,
+            saved_device_file_content_string
+        )
+
+    def test_upload_text_file(self):
+        url = reverse('sound_device.add')
+
+        with open(TEXT_FILE_PATH, 'rb') as manual_file:
+            file_content_string = manual_file.read()
+            manual_file.seek(0)
+            form_data = {
+                'name': 'O BICHO',
+                'instruction_manual': manual_file
+            }
+            response = self.client.post(url, form_data, follow=True)
+            self.assertEqual(response.status_code, 200)
+
+        device = SoundDevice.objects.get()
+        device.instruction_manual.open('r')
+        device_file_content_string = device.instruction_manual.read()
+        device.instruction_manual.close()
+
+        self.assertEqual(
+            file_content_string,
+            device_file_content_string
         )
