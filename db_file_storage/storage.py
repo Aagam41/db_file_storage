@@ -62,6 +62,7 @@ def _get_unique_filename(model_class, filename_field, filename):
 
 class DatabaseFileStorage(Storage):
     def _open(self, name, mode='rb'):
+        assert mode[0] in 'rwab'
         (model_class_path, content_field, filename_field,
             mimetype_field, filename) = name.split('/')
         model_class = _get_model_class(model_class_path)
@@ -75,8 +76,11 @@ class DatabaseFileStorage(Storage):
         return _file
 
     def _save(self, name, content):
-        (model_class_path, content_field, filename_field,
-            mimetype_field, filename) = name.split('/')
+        parts = name.split('/')
+        model_class_path = parts[0]
+        content_field = parts[1]
+        filename_field = parts[2]
+        mimetype_field = parts[3]
         model_class = _get_model_class(model_class_path)
         new_filename = _get_unique_filename(model_class, filename_field, name)
         encoded_bytes = _get_encoded_bytes_from_file(content)
@@ -89,14 +93,17 @@ class DatabaseFileStorage(Storage):
         return new_filename
 
     def delete(self, name):
-        (model_class_path, content_field, filename_field,
-            mimetype_field, filename) = name.split('/')
+        parts = name.split('/')
+        model_class_path = parts[0]
+        filename_field = parts[2]
         model_class = _get_model_class(model_class_path)
         model_class.objects.filter(**{filename_field: name}).delete()
 
     def exists(self, name):
-        (model_class_path, content_field, filename_field,
-            mimetype_field, filename) = name.split('/')
+        parts = name.split('/')
+        model_class_path = parts[0]
+        filename_field = parts[2]
+        filename = parts[4]
         model_class = _get_model_class(model_class_path)
         return model_class.objects.filter(
             **{filename_field: filename}
