@@ -18,9 +18,6 @@ class Migration(migrations.Migration):
                 ('disc', models.ImageField(null=True, upload_to=b'music.CDDisc/bytes/filename/mimetype', blank=True)),
                 ('cover', models.ImageField(null=True, upload_to=b'music.CDCover/bytes/filename/mimetype', blank=True)),
             ],
-            options={
-            },
-            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='CDCover',
@@ -30,9 +27,6 @@ class Migration(migrations.Migration):
                 ('filename', models.CharField(max_length=255)),
                 ('mimetype', models.CharField(max_length=50)),
             ],
-            options={
-            },
-            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='CDDisc',
@@ -42,8 +36,22 @@ class Migration(migrations.Migration):
                 ('filename', models.CharField(max_length=255)),
                 ('mimetype', models.CharField(max_length=50)),
             ],
-            options={
-            },
-            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='SoundDevice',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=100)),
+                ('instruction_manual', models.FileField(null=True, upload_to=b'music.SoundDeviceInstructionManual/bytes/filename/mimetype', blank=True)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='SoundDeviceInstructionManual',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('bytes', models.TextField()),
+                ('filename', models.CharField(max_length=255)),
+                ('mimetype', models.CharField(max_length=50)),
+            ],
         ),
     ]
