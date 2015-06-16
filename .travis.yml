@@ -13,6 +13,6 @@ install:
     - pip install django-nose
     - pip install coveralls
 script:
-    - coverage run demo_and_tests/manage.py test
+    - coverage run --source=db_file_storage demo_and_tests/manage.py test
 after_success:
     - coveralls
