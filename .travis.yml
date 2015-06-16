@@ -11,9 +11,7 @@ install:
     - pip install Pillow
     - pip install $DJANGO
     - pip install coveralls
-before_script:
-    cd demo_and_tests
 script:
-    coverage run --source=db_file_storage manage.py test
+    coverage run --source=db_file_storage demo_and_tests/manage.py test
 after_success:
     coveralls
