@@ -10,8 +10,9 @@ env:
 install:
     - pip install Pillow
     - pip install $DJANGO
+    - pip install django-nose
     - pip install coveralls
 script:
-    coverage run --source=db_file_storage demo_and_tests/manage.py test
+    - coverage run demo_and_tests/manage.py test
 after_success:
-    coveralls
+    - coveralls

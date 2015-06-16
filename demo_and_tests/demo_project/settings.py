@@ -36,6 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.auth',
     #
     'db_file_storage',
+    'django_nose',
     #
     'music',
 )
@@ -48,3 +49,10 @@ MIDDLEWARE_CLASSES = (
 DEFAULT_FILE_STORAGE = 'db_file_storage.storage.DatabaseFileStorage'
 
 TEST_FILES_DIR = os.path.join(BASE_DIR, 'files_for_testing')
+
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+NOSE_ARGS = [
+    '--with-coverage',
+    '--cover-package=db_file_storage',
+]
