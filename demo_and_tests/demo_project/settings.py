@@ -52,7 +52,3 @@ TEST_FILES_DIR = os.path.join(BASE_DIR, 'files_for_testing')
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
-NOSE_ARGS = [
-    '--with-coverage',
-    '--cover-package=db_file_storage',
-]
