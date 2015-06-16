@@ -69,7 +69,7 @@ And the class which will have the FileField::
         name = models.CharField(max_length=100)
         picture = models.ImageField(upload_to='console.ConsolePicture/bytes/filename/mimetype', blank=True, null=True)
 
-In this example, the FileField is actually an ImageField. It's ``upload_to`` argument must be a string in the following format:
+In this example, the FileField is actually an ImageField. Its ``upload_to`` argument must be a string in the following format:
 
 1. the FileModel's app's name
 2. a dot (.)
