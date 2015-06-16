@@ -1,3 +1,7 @@
+========================
+django-db-file-storage
+========================
+
 .. image:: https://travis-ci.org/victor-o-silva/db_file_storage.svg?branch=master
    :target: https://travis-ci.org/victor-o-silva/db_file_storage
    :alt: Build Status
@@ -6,9 +10,9 @@
    :target: https://landscape.io/github/victor-o-silva/db_file_storage/master
    :alt: Code Health
 
-========================
-django-db-file-storage
-========================
+.. image:: https://coveralls.io/repos/victor-o-silva/db_file_storage/badge.svg?branch=master
+   :target: https://coveralls.io/r/victor-o-silva/db_file_storage?branch=master
+   :alt: Code Coverage
 
 Django DB File Storage is a custom
 `file storage system <https://docs.djangoproject.com/en/dev/topics/files/#file-storage>`_
