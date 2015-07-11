@@ -34,7 +34,7 @@ class FormWizardTestCase(TestCase):
 
         # second step - file
         path = os.path.join(settings.TEST_FILES_DIR, 'californication.txt')
-        with open(path, 'r') as lyric_file:
+        with open(path, 'rb') as lyric_file:
             form_data = {
                 'song_lyrics_wizard-current_step': '1',
                 '1-attachment': lyric_file
