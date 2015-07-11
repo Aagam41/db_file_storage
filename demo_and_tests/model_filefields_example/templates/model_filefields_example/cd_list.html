@@ -8,7 +8,7 @@
     }
 </style>
 
-<a href='{% url "cd.add" %}'>Add CD</a>
+<a href='{% url "model_files:cd.add" %}'>Add CD</a>
 
 <hr />
 
@@ -50,3 +50,7 @@
 {% else %}
     <p>No items found.</p>
 {% endif %}
+<hr/>
+<div align='center'>
+    <a href="{% url 'home' %}">Home</a>
+</div>

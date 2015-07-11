@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# python imports
+# python
 import mimetypes
 import os
 import sys
@@ -8,14 +8,12 @@ if sys.version_info.major == 2:  # python2
     from urllib import urlencode
 else:  # python3
     from urllib.parse import urlencode
-
-# django imports
+# django
 from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.urlresolvers import reverse
 from django.test import TestCase
-
-# project imports
+# project
 from .forms import CDForm, CDAdminForm
 from .models import CD, CDDisc, CDCover, SoundDevice
 
@@ -66,10 +64,10 @@ class AddEditAndDeleteCDsTests(TestCase):
             assert disc_pic_nbr in (1, 2)
 
         if method == 'add':
-            url = reverse('cd.add')
+            url = reverse('model_files:cd.add')
         else:  # edit
             cd = get_cd(cd_key=cd_key)
-            url = reverse('cd.edit', kwargs={'pk': cd.pk})
+            url = reverse('model_files:cd.edit', kwargs={'pk': cd.pk})
 
         cd_data = CDS_DATA[cd_key]
         form_data = {'name': cd_data['name']}
@@ -388,7 +386,7 @@ class AddEditAndDeleteCDsTests(TestCase):
         self.assert_pictures_count()
 
     def test_send_same_file_for_different_rows(self):
-        url = reverse('cd.add')
+        url = reverse('model_files:cd.add')
         picture_path = CDS_DATA['btw']['cover_path']
 
         picture_file = open(picture_path, 'rb')
@@ -416,7 +414,7 @@ class AddEditAndDeleteCDsTests(TestCase):
         self.assertNotEqual(cd_btw.cover.name, cd_gh.cover.name)
 
     def test_file_with_no_extension(self):
-        url = reverse('cd.add')
+        url = reverse('model_files:cd.add')
         pic_path = os.path.join(settings.TEST_FILES_DIR, 'btw_cover_no_ext')
 
         picture_file = open(pic_path, 'rb')
@@ -431,7 +429,7 @@ class AddEditAndDeleteCDsTests(TestCase):
         assert cd_btw.cover.name.endswith('/btw_cover_no_ext')
 
     def test_same_file_with_no_extension_for_different_rows(self):
-        url = reverse('cd.add')
+        url = reverse('model_files:cd.add')
         pic_path = os.path.join(settings.TEST_FILES_DIR, 'btw_cover_no_ext')
 
         picture_file = open(pic_path, 'rb')
@@ -507,7 +505,7 @@ class AddEditAndDeleteCDsTests(TestCase):
         )
 
     def test_upload_text_file(self):
-        url = reverse('sound_device.add')
+        url = reverse('model_files:sound_device.add')
 
         with open(TEXT_FILE_PATH, 'rb') as manual_file:
             file_content_string = manual_file.read()

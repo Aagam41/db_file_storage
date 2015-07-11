@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
-
-# project imports
+# project
 from db_file_storage.storage import DatabaseFileStorage
 
 

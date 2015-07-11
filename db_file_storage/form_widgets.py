@@ -1,9 +1,6 @@
-# -*- coding: utf-8 -*-
-
-# python imports
+# python
 import sys
-
-# django imports
+# django
 from django import VERSION as DJ_VERSION
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.html import escape
