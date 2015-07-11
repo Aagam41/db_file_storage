@@ -1,0 +1,22 @@
+<table border="1">
+    <tr>
+        <th>Song</th>
+        <td>{{ song }}</td>
+    </tr>
+    <tr>
+        <th>Artist</th>
+        <td>{{ artist }}</td>
+    </tr>
+    <tr>
+        <th>Lyrics</th>
+        <td>{{ lyrics|linebreaks }}</td>
+    </tr>
+    <tr>
+        <th>Sender</th>
+        <td>{{ sender }}</td>
+    </tr>
+</table>
+<hr/>
+<div align='center'>
+    <a href="{% url 'home' %}">Home</a>
+</div>

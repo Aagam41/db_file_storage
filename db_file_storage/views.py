@@ -1,11 +1,8 @@
-# -*- coding: utf-8 -*-
-
-# django imports
+# django
 from django.core.servers.basehttp import FileWrapper
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.utils.translation import ugettext as _
-
-# project imports
+# project
 from db_file_storage.storage import DatabaseFileStorage
 
 

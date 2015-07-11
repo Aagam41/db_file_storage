@@ -59,7 +59,7 @@ docs/_build/
 target/
 
 # Database
-database.db
+db.sqlite3
 
 # PyEnv
 .python-version

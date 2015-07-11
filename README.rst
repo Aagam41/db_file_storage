@@ -16,15 +16,12 @@ django-db-file-storage
 
 Django DB File Storage is a custom
 `file storage system <https://docs.djangoproject.com/en/dev/topics/files/#file-storage>`_
-for Django. Use it to save your models' FileFields in your database instead of your file system. Supports Python versions ``2.7``, ``3.3`` and ``3.4``, and Django versions ``1.6``, ``1.7`` and ``1.8``.
-
-How to use
-========================
+for Django. Use it to save files in your database instead of your file system. Supports Python versions ``2.7``, ``3.3`` and ``3.4``, and Django versions ``1.6``, ``1.7`` and ``1.8``.
 
 Installing
-------------------------
+========================
 
-If you still haven't done it, install django-db-file-storage in your environment by typing the following code on your shell::
+You can `pip-install <https://pypi.python.org/pypi/pip>`_ django-db-file-storage in your environment by typing the following code on your shell::
 
     pip install django-db-file-storage
 
@@ -34,7 +31,15 @@ Settings
 On your project's settings, add ``'db_file_storage'`` to your
 `INSTALLED_APPS list <https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps>`_.
 
-Still on your project's settings, set `DEFAULT_FILE_STORAGE <https://docs.djangoproject.com/en/dev/ref/settings/#default-file-storage>`_ like this::
+How to use (for FileFields on models)
+========================================
+
+When used for models' FileFields, django-db-file-storage uses a specific model to hold each FileField.
+
+Settings
+------------------------
+
+On your project's settings, set `DEFAULT_FILE_STORAGE <https://docs.djangoproject.com/en/dev/ref/settings/#default-file-storage>`_ like this::
     
     DEFAULT_FILE_STORAGE = 'db_file_storage.storage.DatabaseFileStorage'
     
@@ -166,6 +171,32 @@ Both views must be passed a GET parameter named ``name``, and the value of this 
         <i>Click here to download the picture</i>
     </a>
 
+How to use (for `Form Wizards <http://django-formtools.readthedocs.org/en/latest/wizard.html>`_)
+======================================================================================================================================
+
+When used this way, django-db-file-storage uses a fixed model to store all the saved files. Just set `db_file_storage.storage.FixedModelDatabaseFileStorage` as the wizard's `file_storage`, passing all the attributes that you would define if you were using a model's FileField::
+    
+    from db_file_storage.storage import FixedModelDatabaseFileStorage
+    from formtools.wizard.views import SessionWizardView
+    
+    class ExampleFormWizard(SessionWizardView):
+        file_storage = FixedModelDatabaseFileStorage(
+            model_class_path='form_wizard_example.FormWizardFile',
+            content_field='bytes',
+            filename_field='filename',
+            mimetype_field='mimetype'
+        )
+        (...)
+
+All the parameters shown above are required for the `FixedModelDatabaseFileStorage` initialization. The model that will hold the files must be defined as well (in `form_wizard_example/models.py`, in this case)::
+    
+    class FormWizardFile(models.Model):
+        bytes = models.TextField()
+        filename = models.CharField(max_length=255)
+        mimetype = models.CharField(max_length=50)
+    
+In the demo project, there is a working example with a Form Wizard.
+
 Demo
 ========================
 
@@ -173,7 +204,7 @@ In order to run the demo project, just
 
 #. download the project and ``cd`` into it,
 #. ``cd`` into the ``demo_and_tests`` directory,
-#. `pip install <https://pypi.python.org/pypi/pip>`_ all the libraries specified in the `requirements file <https://github.com/victor-o-silva/db_file_storage/blob/master/demo_and_tests/requirements.txt>`_ in your environment (you might want to create and use a `virtual environment <http://docs.python-guide.org/en/latest/dev/virtualenvs/>`_),
+#. pip-install all the libraries specified in the `requirements file <https://github.com/victor-o-silva/db_file_storage/blob/master/demo_and_tests/requirements.txt>`_ in your environment (you might want to create and use a `virtual environment <http://docs.python-guide.org/en/latest/dev/virtualenvs/>`_),
 #. run ``python manage syncdb`` and ``python manage runserver`` from your shell and
 #. visit `http://localhost:8000 <http://localhost:8000>`_ in your browser.
 

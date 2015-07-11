@@ -10,6 +10,7 @@ env:
 install:
     - pip install Pillow
     - pip install $DJANGO
+    - pip install django-formtools>=1.0
     - pip install django-nose
     - pip install coveralls
 script:

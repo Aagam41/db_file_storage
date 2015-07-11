@@ -1,13 +1,11 @@
-# django imports
+# django
 from django import forms
 from django.contrib.admin.forms import forms as adminforms
-
-# third party imports
+# third party
 from db_file_storage.form_widgets import DBClearableFileInput, \
     DBAdminClearableFileInput
-
-# project imports
-from music.models import CD, SoundDevice
+# project
+from .models import CD, SoundDevice
 
 
 class CDForm(forms.ModelForm):

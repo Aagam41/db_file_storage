@@ -15,7 +15,7 @@ urlpatterns = patterns(
         r'^$',
         ListView.as_view(
             queryset=CD.objects.all(),
-            template_name='music/cd_list.html'
+            template_name='model_filefields_example/cd_list.html'
         ),
         name='cd.list'
     ),
@@ -24,8 +24,8 @@ urlpatterns = patterns(
         CreateView.as_view(
             model=CD,
             form_class=CDForm,
-            template_name='music/cd_form.html',
-            success_url=reverse_lazy('cd.list')
+            template_name='model_filefields_example/cd_form.html',
+            success_url=reverse_lazy('model_files:cd.list')
         ),
         name='cd.add'
     ),
@@ -34,8 +34,8 @@ urlpatterns = patterns(
         UpdateView.as_view(
             model=CD,
             form_class=CDForm,
-            template_name='music/cd_form.html',
-            success_url=reverse_lazy('cd.list')
+            template_name='model_filefields_example/cd_form.html',
+            success_url=reverse_lazy('model_files:cd.list')
         ),
         name='cd.edit'
     ),
@@ -52,8 +52,8 @@ urlpatterns = patterns(
         CreateView.as_view(
             model=SoundDevice,
             form_class=SoundDeviceForm,
-            template_name='music/sound_device_form.html',
-            success_url=reverse_lazy('cd.list')
+            template_name='model_filefields_example/sound_device_form.html',
+            success_url=reverse_lazy('model_files:cd.list')
         ),
         name='sound_device.add'
     ),

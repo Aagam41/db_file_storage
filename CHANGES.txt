@@ -10,3 +10,4 @@ v0.2.10, 06-13-2015 -- Putting demo/test project inside the main repo, updating 
 v0.2.11, 06-14-2015 -- Python3 compatibility
 v0.2.12, 06-14-2015 -- Showing Build Status and Code Health on the README
 v0.3.0,  06-14-2015 -- Test suite (passing) for Python (2.7, 3.3, 3.4) and Django (1.6, 1.7, 1.8)
+v0.3.1,  07-11-2015 -- Adding a DatabaseFileStorage subclass that can be used with Form Wizards
