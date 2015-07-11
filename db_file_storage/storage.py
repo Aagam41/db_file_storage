@@ -26,7 +26,7 @@ class DatabaseFileStorage(Storage):
         # deprecated (to be removed in 1.9) in favor of the the new
         # application loading system. Check here:
         # https://github.com/django/django/blob/1.7/django/db/models/loading.py
-        if DJ_VERSION[0] <= 1 and DJ_VERSION[1] <= 6:
+        if DJ_VERSION[0] == 1 and DJ_VERSION[1] < 7:
             from django.db.models.loading import get_model
         else:
             from django.apps import apps
