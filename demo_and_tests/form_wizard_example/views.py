@@ -1,3 +1,5 @@
+# python
+import sys
 # django
 from django.shortcuts import render
 # third party
@@ -18,6 +20,8 @@ class SongLyricsWizard(SessionWizardView):
     template_name = 'form_wizard_example/form.html'
 
     def done(self, form_list, **kwargs):
+        if sys.version_info.major == 3:  # python3
+            form_list = list(form_list)
         song = form_list[0].cleaned_data['song']
         artist = form_list[0].cleaned_data['artist']
         lyrics = form_list[1].cleaned_data['attachment'].read()

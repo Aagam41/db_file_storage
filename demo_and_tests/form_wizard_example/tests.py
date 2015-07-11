@@ -1,5 +1,6 @@
 # python
 import os
+import sys
 # django
 from django.core.urlresolvers import reverse
 from django.conf import settings
@@ -55,14 +56,25 @@ class FormWizardTestCase(TestCase):
         self.assertEqual(response.context['artist'], 'Red Hot Chili Peppers')
         self.assertEqual(response.context['sender'], 'Victor Silva')
 
-        some_lines = (
-            "It's the edge of the world",
-            "Dream of Californication",
-            "Marry me girl be my fairy to the world",
-            "And Alderon's not far away",
-            "Destruction leads to a very rough road",
-            "And tidal waves couldn't save the world"
-        )
+        if sys.version_info.major == 2:  # python2
+            some_lines = (
+                "It's the edge of the world",
+                "Dream of Californication",
+                "Marry me girl be my fairy to the world",
+                "And Alderon's not far away",
+                "Destruction leads to a very rough road",
+                "And tidal waves couldn't save the world"
+            )
+        else:  # python3
+            some_lines = (
+                b"It's the edge of the world",
+                b"Dream of Californication",
+                b"Marry me girl be my fairy to the world",
+                b"And Alderon's not far away",
+                b"Destruction leads to a very rough road",
+                b"And tidal waves couldn't save the world"
+            )
+
         for line in some_lines:
             self.assertIn(line, response.context['lyrics'])
 
