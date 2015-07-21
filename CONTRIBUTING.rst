@@ -16,7 +16,7 @@ Tests
 ------------------------------
 
 The project with db_file_storage's automated tests is in the
-`demo_and_tests <https://github.com/victor-o-silva/db_file_storage/tree/master/demo_and_tests>`_ directory. The test suite is located in the `tests.py <https://github.com/victor-o-silva/db_file_storage/blob/master/demo_and_tests/music/tests.py>`_ file inside the ``music`` app's directory.
+`demo_and_tests <https://github.com/victor-o-silva/db_file_storage/tree/master/demo_and_tests>`_ directory.
 
 Before creating a pull request, add/expand tests for your changes if needed and make sure that all tests are passing.
 
