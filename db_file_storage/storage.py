@@ -1,6 +1,7 @@
 # python
 import base64
 import sys
+import os
 # django
 from django import VERSION as DJ_VERSION
 from django.core.files.base import ContentFile
@@ -49,7 +50,7 @@ class DatabaseFileStorage(Storage):
     def _get_unique_filename(self, model_cls, filename_field, filename):
         final_name = filename
 
-        if ('.' in filename.rsplit('/', 1)[-1]):
+        if ('.' in filename.rsplit(os.sep, 1)[-1]):
             stem, extension = final_name.rsplit('.', 1)
         else:
             stem, extension = (final_name, '')
@@ -67,7 +68,7 @@ class DatabaseFileStorage(Storage):
 
     def _get_storage_attributes(self, name):
         (model_class_path, content_field, filename_field,
-            mimetype_field, filename) = name.split('/')
+            mimetype_field, filename) = name.split(os.sep)
         return {
             'model_class_path': model_class_path,
             'content_field': content_field,
