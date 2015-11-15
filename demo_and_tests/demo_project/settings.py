@@ -25,7 +25,9 @@ sys.path.append(DB_FILE_STORAGE_PATH)
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-with open(os.path.join(BASE_DIR, 'demo_project/SECRET_KEY.txt')) as skey_file:
+with open(
+    os.path.join(BASE_DIR, 'demo_project', 'SECRET_KEY.txt')
+) as skey_file:
     SECRET_KEY = skey_file.read()
 
 # SECURITY WARNING: don't run with debug turned on in production!
