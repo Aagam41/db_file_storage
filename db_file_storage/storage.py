@@ -1,7 +1,7 @@
 # python
 import base64
-import sys
 import os
+import sys
 # django
 from django import VERSION as DJ_VERSION
 from django.core.files.base import ContentFile
