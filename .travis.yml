@@ -19,8 +19,8 @@ install:
     - pip install $DJANGO
     - pip install django-formtools>=1.0
     - pip install django-nose
+    - pip install coveralls
 script:
     - coverage run --source=db_file_storage demo_and_tests/manage.py test
 after_success:
-    - pip install coveralls
     - coveralls
