@@ -63,3 +63,6 @@ db.sqlite3
 
 # PyEnv
 .python-version
+
+# IDEs
+.idea
