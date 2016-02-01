@@ -8,11 +8,7 @@ from django.core.files.base import ContentFile
 from django.core.files.storage import Storage
 from django.core.urlresolvers import reverse
 from django.utils.crypto import get_random_string
-
-if sys.version_info.major == 2:  # python2
-    from urllib import urlencode
-else:  # python3
-    from urllib.parse import urlencode
+from django.utils.http import urlencode
 
 
 NAME_FORMAT_HINT = '<app>.<model>/<content_field>/<mimetype_field>/<filename_field>/<filename>'
