@@ -526,3 +526,11 @@ class AddEditAndDeleteCDsTests(TestCase):
             file_content_string,
             device_file_content_string
         )
+
+    def test_storage_method_exists(self):
+        from django.core.files.storage import default_storage as storage
+        from django.core.files.base import ContentFile
+
+        self.assertFalse(storage.exists('no_such_file'))
+        saved_name = storage.save('test_file', ContentFile('test content'))
+        self.assertTrue(storage.exists(saved_name))
