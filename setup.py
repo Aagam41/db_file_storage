@@ -21,6 +21,8 @@ setup(
     ],
     classifiers=[
         'Framework :: Django',
+        'Framework :: Django :: 1.8'
+        'Framework :: Django :: 1.9'
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python',
