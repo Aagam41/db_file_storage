@@ -532,8 +532,13 @@ class AddEditAndDeleteCDsTests(TestCase):
 
         self.assertFalse(storage.exists('file_with_wrong_name'))
 
+        if sys.version_info.major == 2:  # python2
+            content_file = ContentFile('test content')
+        else:  # python3
+            content_file = ContentFile(bytearray('test content', 'utf-8'))
+
         device = SoundDevice(name='test_device')
-        device.instruction_manual.save('test_manual_file', ContentFile('test content'))
+        device.instruction_manual.save('test_manual_file', content_file)
         device.save()
 
         saved_device = SoundDevice.objects.get()
