@@ -3,10 +3,11 @@ from db_file_storage.storage import DatabaseFileStorage
 
 
 def delete_file_if_needed(instance, filefield_name):
-    """
-        When editing and the filefield is a new file,
-          delete the previous file (if any) from the database.
-        Call this function immediately BEFORE saving the instance.
+    """Delete file from database only if needed.
+
+    When editing and the filefield is a new file,
+    deletes the previous file (if any) from the database.
+    Call this function immediately BEFORE saving the instance.
     """
     if instance.id:
         model_class = type(instance)
@@ -36,9 +37,9 @@ def delete_file_if_needed(instance, filefield_name):
 
 
 def delete_file(instance, filefield_name):
-    """
-        Delete the file (if any) from the database.
-        Call this function immediately AFTER deleting the instance.
+    """Delete the file (if any) from the database.
+
+    Call this function immediately AFTER deleting the instance.
     """
     file_instance = getattr(instance, filefield_name)
     if file_instance:

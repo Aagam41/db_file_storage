@@ -24,9 +24,7 @@ class FakeValue(object):
 
 
 def db_file_widget(cls):
-    """
-        Editing the download-link inner text.
-    """
+    """Edit the download-link inner text."""
     if DJ_VERSION >= (1, 8, 0, '', 0):
         def get_template_substitution_values(self, value):
             subst = super(cls, self).get_template_substitution_values(value)

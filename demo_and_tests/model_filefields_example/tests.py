@@ -4,10 +4,6 @@
 import mimetypes
 import os
 import sys
-if sys.version_info.major == 2:  # python2
-    from urllib import urlencode
-else:  # python3
-    from urllib.parse import urlencode
 # django
 from django.conf import settings
 from django.core.files.base import ContentFile
@@ -16,6 +12,11 @@ from django.test import TestCase
 # project
 from .forms import CDForm, CDAdminForm
 from .models import CD, CDDisc, CDCover, SoundDevice
+
+if sys.version_info.major == 2:  # python2
+    from urllib import urlencode
+else:  # python3
+    from urllib.parse import urlencode
 
 
 CDS_DATA = {
@@ -55,9 +56,7 @@ class AddEditAndDeleteCDsTests(TestCase):
         self, method, cd_key, with_cover_pic, with_disc_pic,
         disc_pic_nbr=None, clear_cover=False, clear_disc=False
     ):
-        """
-            Create or edit a CD.
-        """
+        """Create or edit a CD."""
         assert method in ('add', 'edit')
         assert cd_key in CDS_DATA
         if with_disc_pic:
@@ -96,9 +95,7 @@ class AddEditAndDeleteCDsTests(TestCase):
         return response
 
     def assert_pic_is_correct(self, cd_key, pic, disc_pic_nbr=None):
-        """
-            Assert that the CD has the correct picture.
-        """
+        """Assert that the CD has the correct picture."""
         assert cd_key in CDS_DATA
         assert pic in ('cover', 'disc')
         if pic == 'disc':
