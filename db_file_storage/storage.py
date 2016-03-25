@@ -1,3 +1,5 @@
+"""Custom Django FILE_STORAGE that saves files in the database."""
+
 # python
 import base64
 import os
@@ -10,7 +12,8 @@ from django.utils.crypto import get_random_string
 from django.utils.http import urlencode
 
 
-NAME_FORMAT_HINT = '<app>.<model>/<content_field>/<mimetype_field>/<filename_field>/<filename>'
+NAME_FORMAT_HINT = '<app>.<model>/<content_field>/<mimetype_field>' \
+                   '/<filename_field>/<filename>'
 
 
 class NameException(Exception):
@@ -18,11 +21,12 @@ class NameException(Exception):
 
 
 class DatabaseFileStorage(Storage):
-    """ File storage system that saves models' FileFields in the database.
+    """File storage system that saves models' FileFields in the database.
 
-        Intended for use with Models' FileFields.
-        Uses a specific model for each FileField of each Model.
+    Intended for use with Models' FileFields.
+    Uses a specific model for each FileField of each Model.
     """
+
     def __init__(self, *args, **kwargs):
         super(DatabaseFileStorage, self).__init__(*args, **kwargs)
         # As of Django 1.7, the utilities in django.db.models.loading are
@@ -70,9 +74,16 @@ class DatabaseFileStorage(Storage):
 
     def _get_storage_attributes(self, name):
         try:
-            (model_class_path, content_field, filename_field, mimetype_field, filename) = name.split(os.sep)
+            (
+                model_class_path,
+                content_field,
+                filename_field,
+                mimetype_field,
+                filename
+            ) = name.split(os.sep)
         except ValueError:
-            raise NameException('Wrong name format. Should be {}'.format(NAME_FORMAT_HINT))
+            raise NameException('Wrong name format. Should be {}'.format(
+                NAME_FORMAT_HINT))
         return {
             'model_class_path': model_class_path,
             'content_field': content_field,
@@ -149,11 +160,12 @@ class DatabaseFileStorage(Storage):
 
 
 class FixedModelDatabaseFileStorage(DatabaseFileStorage):
-    """ File storage system that saves files in the database.
+    """File storage system that saves files in the database.
 
-        Intended for use without Models' FileFields, e.g. with Form Wizards.
-        Uses a fixed Model to store the all the saved files.
+    Intended for use without Models' FileFields, e.g. with Form Wizards.
+    Uses a fixed Model to store the all the saved files.
     """
+
     def __init__(self, *args, **kwargs):
         try:
             self.model_class_path = kwargs.pop('model_class_path')
