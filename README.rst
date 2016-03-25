@@ -16,7 +16,11 @@ django-db-file-storage
 
 Django DB File Storage is a custom
 `file storage system <https://docs.djangoproject.com/en/dev/topics/files/#file-storage>`_
-for Django. Use it to save files in your database instead of your file system. Supports Python versions ``2.7``, ``3.3`` and ``3.4``, and Django versions ``1.6``, ``1.7`` and ``1.8``.
+for Django. Use it to save files in your database instead of your file system.
+
+Supports Python versions ``2.7``, ``3.4`` & ``3.5``, and Django versions ``1.8`` & ``1.9``.
+
+``Python 3.3``, ``Django 1.6`` and ``Django 1.7`` are unsupported (Django DB File Storage no longer delivers security updates or bug fixes for them). If you HAVE to stick with them, you can use Django DB File Storage 0.3.3 `(PyPI) <https://pypi.python.org/pypi/django-db-file-storage/0.3.3>`_ `(GitHub) <https://github.com/victor-o-silva/db_file_storage/tree/0.3.3>`_.
 
 Installing
 ========================
@@ -205,7 +209,7 @@ In order to run the demo project, just
 #. download the project and ``cd`` into it,
 #. ``cd`` into the ``demo_and_tests`` directory,
 #. pip-install all the libraries specified in the `requirements file <https://github.com/victor-o-silva/db_file_storage/blob/master/demo_and_tests/requirements.txt>`_ in your environment (you might want to create and use a `virtual environment <http://docs.python-guide.org/en/latest/dev/virtualenvs/>`_),
-#. run ``python manage syncdb`` and ``python manage runserver`` from your shell and
+#. run ``python manage migrate`` and ``python manage runserver`` from your shell and
 #. visit `http://localhost:8000 <http://localhost:8000>`_ in your browser.
 
 Tests & Contributing
