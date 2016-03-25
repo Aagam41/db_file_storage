@@ -4,7 +4,7 @@
 import base64
 import os
 # django
-from django import VERSION as DJ_VERSION
+from django.apps import apps
 from django.core.files.base import ContentFile
 from django.core.files.storage import Storage
 from django.core.urlresolvers import reverse
@@ -27,22 +27,9 @@ class DatabaseFileStorage(Storage):
     Uses a specific model for each FileField of each Model.
     """
 
-    def __init__(self, *args, **kwargs):
-        super(DatabaseFileStorage, self).__init__(*args, **kwargs)
-        # As of Django 1.7, the utilities in django.db.models.loading are
-        # deprecated (to be removed in 1.9) in favor of the the new
-        # application loading system. Check here:
-        # https://github.com/django/django/blob/1.7/django/db/models/loading.py
-        if DJ_VERSION[0] == 1 and DJ_VERSION[1] < 7:
-            from django.db.models.loading import get_model
-        else:
-            from django.apps import apps
-            get_model = apps.get_model
-        self._get_model = get_model
-
     def _get_model_cls(self, model_class_path):
         app_label, model_name = model_class_path.rsplit('.', 1)
-        return self._get_model(app_label, model_name)
+        return apps.get_model(app_label, model_name)
 
     def _get_encoded_bytes_from_file(self, _file):
         _file.seek(0)
