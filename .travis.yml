@@ -1,8 +1,13 @@
 language: python
+sudo: false
+cache:
+  directories:
+    - $HOME/.cache/pip
 python:
     - "2.7"
     - "3.4"
     - "3.5"
+    - "pypy"
 env:
     - DJANGO="django>=1.8,<1.9"
     - DJANGO="django>=1.9,<1.10"
