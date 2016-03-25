@@ -526,3 +526,24 @@ class AddEditAndDeleteCDsTests(TestCase):
             file_content_string,
             device_file_content_string
         )
+
+    def test_storage_method_exists(self):
+        from django.core.files.storage import default_storage as storage
+
+        self.assertFalse(storage.exists('file_with_wrong_name'))
+
+        if sys.version_info.major == 2:  # python2
+            content_file = ContentFile('test content')
+        else:  # python3
+            content_file = ContentFile(bytearray('test content', 'utf-8'))
+
+        device = SoundDevice(name='test_device')
+        device.instruction_manual.save('test_manual_file', content_file)
+        device.save()
+
+        saved_device = SoundDevice.objects.get()
+        file_name = saved_device.instruction_manual.name
+        self.assertTrue(storage.exists(file_name))
+
+        saved_device.instruction_manual.delete()
+        self.assertFalse(storage.exists(file_name))

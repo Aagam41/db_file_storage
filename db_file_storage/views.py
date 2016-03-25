@@ -1,5 +1,5 @@
 # django
-from django.core.servers.basehttp import FileWrapper
+from wsgiref.util import FileWrapper
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.utils.translation import ugettext as _
 # project

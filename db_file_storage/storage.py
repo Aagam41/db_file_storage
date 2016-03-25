@@ -8,11 +8,14 @@ from django.core.files.base import ContentFile
 from django.core.files.storage import Storage
 from django.core.urlresolvers import reverse
 from django.utils.crypto import get_random_string
+from django.utils.http import urlencode
 
-if sys.version_info.major == 2:  # python2
-    from urllib import urlencode
-else:  # python3
-    from urllib.parse import urlencode
+
+NAME_FORMAT_HINT = '<app>.<model>/<content_field>/<mimetype_field>/<filename_field>/<filename>'
+
+
+class NameException(Exception):
+    pass
 
 
 class DatabaseFileStorage(Storage):
@@ -67,8 +70,10 @@ class DatabaseFileStorage(Storage):
         return final_name
 
     def _get_storage_attributes(self, name):
-        (model_class_path, content_field, filename_field,
-            mimetype_field, filename) = name.split(os.sep)
+        try:
+            (model_class_path, content_field, filename_field, mimetype_field, filename) = name.split(os.sep)
+        except ValueError:
+            raise NameException('Wrong name format. Should be {}'.format(NAME_FORMAT_HINT))
         return {
             'model_class_path': model_class_path,
             'content_field': content_field,
@@ -127,14 +132,16 @@ class DatabaseFileStorage(Storage):
         model_cls.objects.filter(**{filename_field: name}).delete()
 
     def exists(self, name):
-        storage_attrs = self._get_storage_attributes(name)
+        try:
+            storage_attrs = self._get_storage_attributes(name)
+        except NameException:
+            return False
         model_class_path = storage_attrs['model_class_path']
         filename_field = storage_attrs['filename_field']
-        filename = storage_attrs['filename']
 
         model_cls = self._get_model_cls(model_class_path)
         return model_cls.objects.filter(
-            **{filename_field: filename}
+            **{filename_field: name}
         ).exists()
 
     def url(self, name):
