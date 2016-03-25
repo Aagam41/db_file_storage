@@ -43,6 +43,9 @@ class CD(models.Model):
         delete_file(self, 'disc')
         delete_file(self, 'cover')
 
+    def __str__(self):
+        return self.name
+
 
 class SoundDeviceInstructionManual(models.Model):
     bytes = models.TextField()
