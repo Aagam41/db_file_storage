@@ -8,7 +8,7 @@ class SongLyricsForm1(forms.Form):
 
 
 class SongLyricsForm2(forms.Form):
-    attachment = forms.FileField()
+    attachment = forms.FileField(label='Lyrics', help_text='a plain text file')
 
 
 class SongLyricsForm3(forms.Form):
