@@ -13,4 +13,4 @@ v0.3.0,  06-14-2015 -- Test suite (passing) for Python (2.7, 3.3, 3.4) and Djang
 v0.3.1,  07-11-2015 -- Adding a DatabaseFileStorage subclass that can be used with Form Wizards
 v0.3.2,  11-15-2015 -- Adding Windows compatibility
 v0.3.3,  11-15-2015 -- Fixing lib for OSs other than Linux
-v0.4.0,  03-25-2016 -- Dropped support for Python 3.3, Django 1.6 and Django 1.7 ; currently supporting  Python (2.7, 3.4, 3.5) and Django (1.8, 1.9). 
+v0.4.0,  03-25-2016 -- Dropped support for Python 3.3, Django 1.6 and Django 1.7 ; Currently supporting  Python (2.7, 3.4, 3.5) and Django (1.8, 1.9) ; Change license to MIT License
