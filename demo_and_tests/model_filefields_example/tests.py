@@ -9,14 +9,10 @@ from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.urlresolvers import reverse
 from django.test import TestCase
+from django.utils.http import urlencode
 # project
 from .forms import CDForm, CDAdminForm
 from .models import CD, CDDisc, CDCover, SoundDevice
-
-if sys.version_info.major == 2:  # python2
-    from urllib import urlencode
-else:  # python3
-    from urllib.parse import urlencode
 
 
 CDS_DATA = {
