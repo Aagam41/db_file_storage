@@ -42,7 +42,7 @@ urlpatterns = [
         r'^cds/delete/(?P<pk>\d+)/$',
         DeleteView.as_view(
             model=CD,
-            success_url=reverse_lazy('cd.list')
+            success_url=reverse_lazy('model_files:cd.list')
         ),
         name='cd.delete'
     ),
