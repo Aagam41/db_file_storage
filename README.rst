@@ -29,7 +29,7 @@ Supports Python versions ``2.7``, ``3.4`` & ``3.5``, and Django versions ``1.8``
 Documentation
 ========================
 
-The project docs can be found `here (RTD) <http://readthedocs.org/projects/django-db-file-storage>`_.
+The project docs can be found `here (RTD) <http://django-db-file-storage.readthedocs.org/en/master/>`_.
 
 Demo
 ========================
