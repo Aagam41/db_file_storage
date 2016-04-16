@@ -18,6 +18,9 @@ django-db-file-storage
    :target: http://django-db-file-storage.readthedocs.org/en/master/?badge=master
    :alt: Documentation Status
 
+.. image:: https://badge.fury.io/py/django-db-file-storage.svg
+   :target: https://badge.fury.io/py/django-db-file-storage
+
 Django DB File Storage is a custom
 `file storage system <https://docs.djangoproject.com/en/dev/topics/files/#file-storage>`_
 for Django. Use it to save files in your database instead of your file system.
