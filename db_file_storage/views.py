@@ -21,7 +21,7 @@ def get_file(request, add_attachment_headers):
         FileWrapper(_file),
         content_type=_file.mimetype
     )
-
+    response['Content-Length'] = _file.tell()
     if add_attachment_headers:
         response['Content-Disposition'] = \
             'attachment; filename=%(name)s' % {'name': _file.filename}
