@@ -5,46 +5,46 @@ from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 # project imports
-from .forms import CDForm, SoundDeviceForm
-from .models import CD, SoundDevice
+from .forms import BookForm, SoundDeviceForm
+from .models import Book, SoundDevice
 
 
 urlpatterns = [
     url(
         r'^$',
         ListView.as_view(
-            queryset=CD.objects.all(),
-            template_name='model_filefields_example/cd_list.html'
+            queryset=Book.objects.all(),
+            template_name='model_filefields_example/book_list.html'
         ),
-        name='cd.list'
+        name='book.list'
     ),
     url(
-        r'^cds/add/$',
+        r'^books/add/$',
         CreateView.as_view(
-            model=CD,
-            form_class=CDForm,
-            template_name='model_filefields_example/cd_form.html',
-            success_url=reverse_lazy('model_files:cd.list')
+            model=Book,
+            form_class=BookForm,
+            template_name='model_filefields_example/book_form.html',
+            success_url=reverse_lazy('model_files:book.list')
         ),
-        name='cd.add'
+        name='book.add'
     ),
     url(
-        r'^cds/edit/(?P<pk>\d+)/$',
+        r'^books/edit/(?P<pk>\d+)/$',
         UpdateView.as_view(
-            model=CD,
-            form_class=CDForm,
-            template_name='model_filefields_example/cd_form.html',
-            success_url=reverse_lazy('model_files:cd.list')
+            model=Book,
+            form_class=BookForm,
+            template_name='model_filefields_example/book_form.html',
+            success_url=reverse_lazy('model_files:book.list')
         ),
-        name='cd.edit'
+        name='book.edit'
     ),
     url(
-        r'^cds/delete/(?P<pk>\d+)/$',
+        r'^books/delete/(?P<pk>\d+)/$',
         DeleteView.as_view(
-            model=CD,
-            success_url=reverse_lazy('model_files:cd.list')
+            model=Book,
+            success_url=reverse_lazy('model_files:book.list')
         ),
-        name='cd.delete'
+        name='book.delete'
     ),
     url(
         r'^sound_devices/add/$',
@@ -52,7 +52,7 @@ urlpatterns = [
             model=SoundDevice,
             form_class=SoundDeviceForm,
             template_name='model_filefields_example/sound_device_form.html',
-            success_url=reverse_lazy('model_files:cd.list')
+            success_url=reverse_lazy('model_files:book.list')
         ),
         name='sound_device.add'
     ),

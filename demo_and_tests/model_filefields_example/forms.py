@@ -5,26 +5,26 @@ from django.contrib.admin.forms import forms as adminforms
 from db_file_storage.form_widgets import DBClearableFileInput, \
     DBAdminClearableFileInput
 # project
-from .models import CD, SoundDevice
+from .models import Book, SoundDevice
 
 
-class CDForm(forms.ModelForm):
+class BookForm(forms.ModelForm):
     class Meta(object):
-        model = CD
+        model = Book
         exclude = []
         widgets = {
-            'disc': DBClearableFileInput,
-            'cover': DBClearableFileInput,
+            'index': DBClearableFileInput,
+            'pages': DBClearableFileInput,
         }
 
 
-class CDAdminForm(adminforms.ModelForm):
+class BookAdminForm(adminforms.ModelForm):
     class Meta(object):
-        model = CD
+        model = Book
         exclude = []
         widgets = {
-            'disc': DBAdminClearableFileInput,
-            'cover': DBAdminClearableFileInput,
+            'index': DBAdminClearableFileInput,
+            'pages': DBAdminClearableFileInput,
         }
 
 

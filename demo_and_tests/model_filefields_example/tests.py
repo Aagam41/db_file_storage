@@ -1,142 +1,43 @@
 # -*- coding: utf-8 -*-
-
 # python
+from __future__ import unicode_literals
 import mimetypes
 import os
 import sys
 # django
+from django.core.files.storage import default_storage
 from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.utils.http import urlencode
 # project
-from .forms import CDForm, CDAdminForm
-from .models import CD, CDDisc, CDCover, SoundDevice
+from .forms import BookForm, BookAdminForm
+from .models import Book, BookIndex, BookPages, SoundDevice
 
 
-CDS_DATA = {
-    'btw': {
-        'name': 'By The Way',
-        'cover_path': os.path.join(settings.TEST_FILES_DIR, 'btw_cover.jpg'),
-        'disc1_path': os.path.join(settings.TEST_FILES_DIR, 'btw_disc1.png'),
-        'disc2_path': os.path.join(settings.TEST_FILES_DIR, 'btw_disc2.jpg'),
-    },
-    'gh': {
-        'name': 'Greatest Hits',
-        'cover_path': os.path.join(settings.TEST_FILES_DIR, 'gh_cover.jpg'),
-        'disc1_path': os.path.join(settings.TEST_FILES_DIR, 'gh_disc1.jpg'),
-        'disc2_path': os.path.join(settings.TEST_FILES_DIR, 'gh_disc2.jpg'),
-    },
-}
-TEXT_FILE_PATH = os.path.join(settings.TEST_FILES_DIR, 'o_bicho.txt')
+def get_file_path(file_name):
+    return os.path.join(settings.TEST_FILES_DIR, file_name)
 
 
-def get_cd(cd_key):
-    assert cd_key in CDS_DATA
-    name = CDS_DATA[cd_key]['name']
-    return CD.objects.get(name=name)
-
-
-class AddEditAndDeleteCDsTests(TestCase):
-    def __init__(self, *args, **kwargs):
-        super(AddEditAndDeleteCDsTests, self).__init__(*args, **kwargs)
-        self.cover_count = 0
-        self.disc_count = 0
-
-    def assert_pictures_count(self):
-        self.assertEqual(CDCover.objects.count(), self.cover_count)
-        self.assertEqual(CDDisc.objects.count(), self.disc_count)
-
-    def add_or_edit_cd(
-        self, method, cd_key, with_cover_pic, with_disc_pic,
-        disc_pic_nbr=None, clear_cover=False, clear_disc=False
-    ):
-        """Create or edit a CD."""
-        assert method in ('add', 'edit')
-        assert cd_key in CDS_DATA
-        if with_disc_pic:
-            assert disc_pic_nbr in (1, 2)
-
-        if method == 'add':
-            url = reverse('model_files:cd.add')
-        else:  # edit
-            cd = get_cd(cd_key=cd_key)
-            url = reverse('model_files:cd.edit', kwargs={'pk': cd.pk})
-
-        cd_data = CDS_DATA[cd_key]
-        form_data = {'name': cd_data['name']}
-
-        cover_file = None
-        disc_file = None
-
-        if with_cover_pic:
-            cover_file = open(cd_data['cover_path'], 'rb')
-            form_data['cover'] = cover_file
-        elif clear_cover:
-            form_data['cover-clear'] = 'on'
-
-        if with_disc_pic:
-            disc_file = open(cd_data['disc%s_path' % disc_pic_nbr], 'rb')
-            form_data['disc'] = disc_file
-        elif clear_disc:
-            form_data['disc-clear'] = 'on'
-
-        response = self.client.post(url, form_data, follow=True)
-
-        if cover_file:
-            cover_file.close()
-        if disc_file:
-            disc_file.close()
-        return response
-
-    def assert_pic_is_correct(self, cd_key, pic, disc_pic_nbr=None):
-        """Assert that the CD has the correct picture."""
-        assert cd_key in CDS_DATA
-        assert pic in ('cover', 'disc')
-        if pic == 'disc':
-            assert disc_pic_nbr in (1, 2)
-
-        cd = get_cd(cd_key=cd_key)
-        cd_data = CDS_DATA[cd_key]
-
-        if pic == 'cover':
-            picture_path = cd_data['cover_path']
-        else:  # disc
-            picture_path = cd_data['disc%s_path' % disc_pic_nbr]
-
-        download_url = reverse('db_file_storage.download_file')
-        if pic == 'cover':
-            download_url += '?' + urlencode({'name': cd.cover.name})
-        else:  # disc
-            download_url += '?' + urlencode({'name': cd.disc.name})
-
-        response = self.client.get(download_url)
-
-        with open(picture_path, 'rb') as pic_file:
-            # Assert that the contents of the saved picture are correct
-            self.assertEqual(pic_file.read(), response.content)
-
-        # Assert that the mimetype of the saved picture is correct
-        self.assertEqual(
-            mimetypes.guess_type(picture_path)[0],
-            response['Content-Type']
-        )
+class AddEditAndDeleteBooksTestCase(TestCase):
 
     def test_download_with_invalid_name(self):
-        self.add_or_edit_cd(
-            method='add',
-            cd_key='gh',
-            with_cover_pic=False,
-            with_disc_pic=True,
-            disc_pic_nbr=1
-        )
+        # Create book
+        save_url = reverse('model_files:book.add')
+        index_file = open(get_file_path('inferno_index.txt'))
+        form_data = {'name': 'Inferno',
+                     'index': index_file}
+        self.client.post(save_url, form_data, follow=True)
+        index_file.close()
+        book = Book.objects.get(name='Inferno')
+
         # Valid name
-        cd = get_cd(cd_key='gh')
         download_url = reverse('db_file_storage.download_file')
-        download_url += '?' + urlencode({'name': cd.disc})
+        download_url += '?' + urlencode({'name': book.index})
         response = self.client.get(download_url)
         self.assertEqual(response.status_code, 200)
+
         # Invalid name
         download_url = reverse('db_file_storage.download_file')
         download_url += '?' + urlencode({'name': 'invalid_name'})
@@ -144,321 +45,278 @@ class AddEditAndDeleteCDsTests(TestCase):
         self.assertEqual(response.status_code, 400)
 
     def test_form_widget_shows_proper_filename(self):
-        self.add_or_edit_cd(
-            method='add',
-            cd_key='btw',
-            with_cover_pic=False,
-            with_disc_pic=True,
-            disc_pic_nbr=1
-        )
-        cd = get_cd(cd_key='btw')
-        form = CDForm(instance=cd)
-        assert '>btw_disc1.png</a>' in form.as_p()
+        # Create book
+        save_url = reverse('model_files:book.add')
+        index_file = open(get_file_path('inferno_index.txt'))
+        form_data = {'name': 'Inferno',
+                     'index': index_file}
+        self.client.post(save_url, form_data, follow=True)
+        index_file.close()
+        book = Book.objects.get(name='Inferno')
+
+        # Check widget download text
+        form = BookForm(instance=book)
+        self.assertIn('>inferno_index.txt</a>', form['index'].as_widget())
 
     def test_admin_form_widget_shows_proper_filename(self):
-        self.add_or_edit_cd(
-            method='add',
-            cd_key='btw',
-            with_cover_pic=False,
-            with_disc_pic=True,
-            disc_pic_nbr=1
+        # Create book
+        save_url = reverse('model_files:book.add')
+        index_file = open(get_file_path('inferno_index.txt'))
+        form_data = {'name': 'Inferno',
+                     'index': index_file}
+        self.client.post(save_url, form_data, follow=True)
+        index_file.close()
+        book = Book.objects.get(name='Inferno')
+
+        # Check widget download text
+        form = BookAdminForm(instance=book)
+        self.assertIn('>inferno_index.txt</a>', form['index'].as_widget())
+
+    def verify_file(self, download_url, file_name):
+        response = self.client.get(download_url)
+        with open(get_file_path(file_name), 'rb') as the_file:
+            # Assert that the contents of the saved file are correct
+            self.assertEqual(the_file.read(), response.content)
+        # Assert that the mimetype of the saved file is correct
+        self.assertEqual(
+            mimetypes.guess_type(file_name)[0],
+            response['Content-Type']
         )
-        cd = get_cd(cd_key='btw')
-        form = CDAdminForm(instance=cd)
-        assert '>btw_disc1.png</a>' in form.as_p()
 
     def test_files_operations(self):
-        self.cover_count = 0
-        self.disc_count = 0
+        save_new_url = reverse('model_files:book.add')
+        download_url = reverse('db_file_storage.download_file')
 
-        # Add "By The Way" (BTW) CD without disc and cover pictures.
-        self.add_or_edit_cd(
-            method='add',
-            cd_key='btw',
-            with_cover_pic=False,
-            with_disc_pic=False
-        )
-        self.assert_pictures_count()
+        #
+        # Add "Inferno" book without index or pages.
+        #
+        form_data = {'name': 'Inferno'}
+        self.client.post(save_new_url, form_data, follow=True)
+        inferno = Book.objects.get(name='Inferno')
+        edit_inferno_url = reverse('model_files:book.edit',
+                                   kwargs={'pk': inferno.pk})
+        # Assert book file fields are empty
+        self.assertEqual(inferno.index.name, '')
+        self.assertEqual(inferno.pages.name, '')
+        # Assert no BookIndex and no BookPages were created
+        self.assertEqual(BookIndex.objects.count(), 0)
+        self.assertEqual(BookPages.objects.count(), 0)
 
-        # Assert BTW's pictures fields are empty
-        cd = get_cd(cd_key='btw')
-        self.assertEqual(cd.disc.name, '')
-        self.assertEqual(cd.cover.name, '')
+        #
+        # Edit Inferno: add index file
+        #
+        form_data = {'name': 'Inferno',
+                     'index': open(get_file_path('inferno_index.txt'))}
+        self.client.post(edit_inferno_url, form_data, follow=True)
+        inferno = Book.objects.get(name='Inferno')
+        # Assert that only a BookIndex was created
+        self.assertEqual(BookIndex.objects.count(), 1)
+        self.assertEqual(BookPages.objects.count(), 0)
+        # Verify Inferno's new index
+        url = download_url + '?' + urlencode({'name': inferno.index.name})
+        self.verify_file(url, 'inferno_index.txt')
+        # Assert Inferno's pages field is still empty
+        self.assertEqual(inferno.pages.name, '')
 
-        # Edit BTW CD: add disc picture
-        self.add_or_edit_cd(
-            method='edit',
-            cd_key='btw',
-            with_cover_pic=False,
-            with_disc_pic=True,
-            disc_pic_nbr=1
-        )
-        self.disc_count += 1
-        self.assert_pictures_count()
+        #
+        # Edit Inferno: add pages file
+        #
+        form_data = {'name': 'Inferno',
+                     'pages': open(get_file_path('inferno_pages_v1.txt'))}
+        self.client.post(edit_inferno_url, form_data, follow=True)
+        inferno = Book.objects.get(name='Inferno')
+        # Assert that only a BookPages was created
+        self.assertEqual(BookIndex.objects.count(), 1)
+        self.assertEqual(BookPages.objects.count(), 1)
+        # Verify Inferno's index file is still correct
+        url = download_url + '?' + urlencode({'name': inferno.index.name})
+        self.verify_file(url, 'inferno_index.txt')
+        # Verify Inferno's new pages
+        url = download_url + '?' + urlencode({'name': inferno.pages.name})
+        self.verify_file(url, 'inferno_pages_v1.txt')
 
-        # Assert that the contents of the new BTW disc picture are correct
-        self.assert_pic_is_correct(cd_key='btw', pic='disc', disc_pic_nbr=1)
+        #
+        # Edit Inferno: change pages file
+        #
+        form_data = {'name': 'Inferno',
+                     'pages': open(get_file_path('inferno_pages_v2.txt'))}
+        self.client.post(edit_inferno_url, form_data, follow=True)
+        inferno = Book.objects.get(name='Inferno')
+        # Assert that old BookPages was deleted and new one was created
+        self.assertEqual(BookIndex.objects.count(), 1)
+        self.assertEqual(BookPages.objects.count(), 1)
+        # Verify Inferno's index file is still correct
+        url = download_url + '?' + urlencode({'name': inferno.index.name})
+        self.verify_file(url, 'inferno_index.txt')
+        # Verify Inferno's new pages
+        url = download_url + '?' + urlencode({'name': inferno.pages.name})
+        self.verify_file(url, 'inferno_pages_v2.txt')
 
-        # Assert BTW's cover picture field is still empty
-        cd = get_cd(cd_key='btw')
-        self.assertEqual(cd.cover.name, '')
+        #
+        # Edit Inferno: clear pages file
+        #
+        form_data = {'name': 'Inferno',
+                     'pages-clear': 'on'}
+        self.client.post(edit_inferno_url, form_data, follow=True)
+        inferno = Book.objects.get(name='Inferno')
+        # Assert that the BookPages was deleted
+        self.assertEqual(BookIndex.objects.count(), 1)
+        self.assertEqual(BookPages.objects.count(), 0)
+        # Assert that Inferno's pages field is empty now
+        self.assertEqual(inferno.pages.name, '')
+        # Assert that the contents of old Inferno's index are still correct
+        url = download_url + '?' + urlencode({'name': inferno.index.name})
+        self.verify_file(url, 'inferno_index.txt')
 
-        # Edit BTW CD: add cover picture
-        self.add_or_edit_cd(
-            method='edit',
-            cd_key='btw',
-            with_cover_pic=True,
-            with_disc_pic=False
-        )
-        self.cover_count += 1
-        self.assert_pictures_count()
+        #
+        # Add "Lost Symbol" book with index and pages.
+        #
+        form_data = {'name': 'Lost Symbol',
+                     'index': open(get_file_path('lost_symbol_index.txt')),
+                     'pages': open(get_file_path('lost_symbol_pages_v1.txt'))}
+        self.client.post(save_new_url, form_data, follow=True)
+        lost_symbol = Book.objects.get(name='Lost Symbol')
+        inferno = Book.objects.get(name='Inferno')
+        edit_lost_symbol_url = reverse('model_files:book.edit',
+                                       kwargs={'pk': lost_symbol.pk})
+        # Assert that one BookIndex and one BookPages were created
+        self.assertEqual(BookIndex.objects.count(), 2)
+        self.assertEqual(BookPages.objects.count(), 1)
 
-        # Assert that the contents of the BTW disc picture are still correct
-        self.assert_pic_is_correct(cd_key='btw', pic='disc', disc_pic_nbr=1)
+        # From now on, after each change in any of the Books,
+        # we check if the files are correct for both of them,
+        # to ensure that saving/deleting files of a Book doesn't
+        # interfere with the files of the other one.
 
-        # Assert that the contents of the new BTW cover picture are correct
-        self.assert_pic_is_correct(cd_key='btw', pic='cover')
+        # Assert Infernos's page field is still empty
+        self.assertEqual(inferno.pages.name, '')
+        # Assert that the contents of Inferno's index are still correct
+        url = download_url + '?' + urlencode({'name': inferno.index.name})
+        self.verify_file(url, 'inferno_index.txt')
+        # Assert that the contents of Lost Symbol's index are correct
+        url = download_url + '?' + urlencode({'name': lost_symbol.index.name})
+        self.verify_file(url, 'lost_symbol_index.txt')
+        # Assert that the contents of Lost Symbol's pages are correct
+        url = download_url + '?' + urlencode({'name': lost_symbol.pages.name})
+        self.verify_file(url, 'lost_symbol_pages_v1.txt')
 
-        # Edit BTW CD: change disc picture
-        self.add_or_edit_cd(
-            method='edit',
-            cd_key='btw',
-            with_cover_pic=False,
-            with_disc_pic=True,
-            disc_pic_nbr=2
-        )
-        self.assert_pictures_count()
+        #
+        # Edit Lost Symbol: clear index file
+        #
+        form_data = {'name': 'Lost Symbol',
+                     'index-clear': 'on'}
+        self.client.post(edit_lost_symbol_url, form_data, follow=True)
+        lost_symbol = Book.objects.get(name='Lost Symbol')
+        inferno = Book.objects.get(name='Inferno')
+        # Assert one BookIndex was deleted
+        self.assertEqual(BookIndex.objects.count(), 1)
+        self.assertEqual(BookPages.objects.count(), 1)
+        # Assert that the contents of Lost Symbol's pages are still correct
+        url = download_url + '?' + urlencode({'name': lost_symbol.pages.name})
+        self.verify_file(url, 'lost_symbol_pages_v1.txt')
+        # Assert that the contents of Inferno's index are still correct
+        url = download_url + '?' + urlencode({'name': inferno.index.name})
+        self.verify_file(url, 'inferno_index.txt')
+        # Assert that Inferno's pages are still empty
+        self.assertEqual(inferno.pages.name, '')
+        # Assert that Lost Symbol's index is empty now
+        self.assertEqual(lost_symbol.index.name, '')
 
-        # Assert that the contents of the new BTW disc picture are correct
-        self.assert_pic_is_correct(cd_key='btw', pic='disc', disc_pic_nbr=2)
+        #
+        # Delete Inferno
+        #
+        inferno.delete()
+        lost_symbol = Book.objects.get(name='Lost Symbol')
+        # Assert one BookIndex was deleted
+        self.assertEqual(BookIndex.objects.count(), 0)
+        self.assertEqual(BookPages.objects.count(), 1)
+        # Assert that the contents Lost Symbol's pages are still correct
+        url = download_url + '?' + urlencode({'name': lost_symbol.pages.name})
+        self.verify_file(url, 'lost_symbol_pages_v1.txt')
+        # Assert that Lost Symbol's index is still empty
+        self.assertEqual(lost_symbol.index.name, '')
+        return
 
-        # Assert that the contents of the BTW cover picture are still correct
-        self.assert_pic_is_correct(cd_key='btw', pic='cover')
+        #
+        # Delete Lost Symbol
+        #
+        lost_symbol.delete()
+        # Assert that there are no BookIndex or BookPages left
+        self.assertEqual(BookIndex.objects.count(), 0)
+        self.assertEqual(BookPages.objects.count(), 0)
 
-        # Edit BTW CD: clear cover picture
-        self.add_or_edit_cd(
-            method='edit',
-            cd_key='btw',
-            with_cover_pic=False,
-            with_disc_pic=False,
-            clear_cover=True
-        )
-        self.cover_count -= 1
-        self.assert_pictures_count()
+    def test_binary_file(self):
+        save_new_url = reverse('model_files:book.add')
+        download_url = reverse('db_file_storage.download_file')
 
-        # Assert BTW's cover picture field is empty now
-        cd = get_cd(cd_key='btw')
-        self.assertEqual(cd.cover.name, '')
+        # Save book
+        form_data = {'name': 'Book With Cover',
+                     'cover': open(get_file_path('book.png'), 'rb')}
+        self.client.post(save_new_url, form_data, follow=True)
+        book = Book.objects.get(name='Book With Cover')
 
-        # Assert that the contents of the BTW disc picture are still correct
-        self.assert_pic_is_correct(cd_key='btw', pic='disc', disc_pic_nbr=2)
-
-        # Add "Greatest hits" (GH) CD with disc and cover pictures.
-        self.add_or_edit_cd(
-            method='add',
-            cd_key='gh',
-            with_cover_pic=True,
-            with_disc_pic=True,
-            disc_pic_nbr=1
-        )
-        self.cover_count += 1
-        self.disc_count += 1
-        self.assert_pictures_count()
-
-        """
-            From now on, after each change in any of the CDs,
-              we check if the pictures are correct for both of them,
-              to ensure that saving/deleting pictures of a CD doesn't
-              interfere with the pictures of the other one.
-        """
-
-        # Assert BTW's cover picture field is still empty
-        cd = get_cd(cd_key='btw')
-        self.assertEqual(cd.cover.name, '')
-
-        # Assert that the contents of the BTW disc picture are still correct
-        self.assert_pic_is_correct(cd_key='btw', pic='disc', disc_pic_nbr=2)
-
-        # Assert that the contents of the GH cover picture are correct
-        self.assert_pic_is_correct(cd_key='gh', pic='cover')
-
-        # Assert that the contents of the GH disc picture are correct
-        self.assert_pic_is_correct(cd_key='gh', pic='disc', disc_pic_nbr=1)
-
-        # Edit GH CD: clear disc picture
-        self.add_or_edit_cd(
-            method='edit',
-            cd_key='gh',
-            with_cover_pic=False,
-            with_disc_pic=False,
-            clear_disc=True
-        )
-        self.disc_count -= 1
-        self.assert_pictures_count()
-
-        # Assert BTW's cover picture field is still empty
-        cd = get_cd(cd_key='btw')
-        self.assertEqual(cd.cover.name, '')
-
-        # Assert that the contents of the BTW disc picture are still correct
-        self.assert_pic_is_correct(cd_key='btw', pic='disc', disc_pic_nbr=2)
-
-        # Assert that the contents of the GH cover picture are still correct
-        self.assert_pic_is_correct(cd_key='gh', pic='cover')
-
-        # Assert GH's disc picture field is empty now
-        cd = get_cd(cd_key='gh')
-        self.assertEqual(cd.disc.name, '')
-
-        # Edit BTW CD: add cover picture
-        self.add_or_edit_cd(
-            method='edit',
-            cd_key='btw',
-            with_cover_pic=True,
-            with_disc_pic=False
-        )
-        self.cover_count += 1
-        self.assert_pictures_count()
-
-        # Assert that the contents of the BTW cover picture are correct
-        self.assert_pic_is_correct(cd_key='btw', pic='cover')
-
-        # Assert that the contents of the BTW disc picture are still correct
-        self.assert_pic_is_correct(cd_key='btw', pic='disc', disc_pic_nbr=2)
-
-        # Assert that the contents of the GH cover picture are still correct
-        self.assert_pic_is_correct(cd_key='gh', pic='cover')
-
-        # Assert GH's disc picture field is still empty
-        cd = get_cd(cd_key='gh')
-        self.assertEqual(cd.disc.name, '')
-
-        # Edit GH CD: add disc picture
-        self.add_or_edit_cd(
-            method='edit',
-            cd_key='gh',
-            with_cover_pic=False,
-            with_disc_pic=True,
-            disc_pic_nbr=2
-        )
-        self.disc_count += 1
-        self.assert_pictures_count()
-
-        # Assert that the contents of the BTW cover picture are still correct
-        self.assert_pic_is_correct(cd_key='btw', pic='cover')
-
-        # Assert that the contents of the BTW disc picture are still correct
-        self.assert_pic_is_correct(cd_key='btw', pic='disc', disc_pic_nbr=2)
-
-        # Assert that the contents of the GH cover picture are still correct
-        self.assert_pic_is_correct(cd_key='gh', pic='cover')
-
-        # Assert that the contents of the GH disc picture are correct
-        self.assert_pic_is_correct(cd_key='gh', pic='disc', disc_pic_nbr=2)
-
-        # Deleting BTW CD
-        cd = get_cd(cd_key='btw')
-        cd.delete()
-        self.cover_count -= 1
-        self.disc_count -= 1
-        self.assert_pictures_count()
-
-        # Assert that the contents of the GH cover picture are still correct
-        self.assert_pic_is_correct(cd_key='gh', pic='cover')
-
-        # Assert that the contents of the GH disc picture are still correct
-        self.assert_pic_is_correct(cd_key='gh', pic='disc', disc_pic_nbr=2)
-
-        # Deleting GH CD
-        cd = get_cd(cd_key='gh')
-        cd.delete()
-        self.cover_count -= 1
-        self.disc_count -= 1
-        self.assertEqual(self.cover_count, 0)
-        self.assertEqual(self.disc_count, 0)
-        self.assert_pictures_count()
+        # Verify book's cover
+        url = download_url + '?' + urlencode({'name': book.cover.name})
+        self.verify_file(url, 'book.png')
 
     def test_send_same_file_for_different_rows(self):
-        url = reverse('model_files:cd.add')
-        picture_path = CDS_DATA['btw']['cover_path']
+        url = reverse('model_files:book.add')
 
-        picture_file = open(picture_path, 'rb')
-        form_data = {
-            'name': CDS_DATA['btw']['name'],
-            'cover': picture_file
-        }
+        index_file = open(get_file_path('inferno_index.txt'))
+        form_data = {'name': 'Inferno 1',
+                     'index': index_file}
         self.client.post(url, form_data)
-        picture_file.close()
-
-        picture_file = open(picture_path, 'rb')
-        form_data = {
-            'name': CDS_DATA['gh']['name'],
-            'cover': picture_file
-        }
+        index_file.seek(0)
+        form_data = {'name': 'Inferno 2',
+                     'index': index_file}
         self.client.post(url, form_data)
-        picture_file.close()
+        index_file.close()
 
-        self.cover_count = 2
-        self.disc_count = 0
-        self.assert_pictures_count()
+        self.assertEqual(BookIndex.objects.count(), 2)
 
-        cd_btw = get_cd(cd_key='btw')
-        cd_gh = get_cd(cd_key='gh')
-        self.assertNotEqual(cd_btw.cover.name, cd_gh.cover.name)
+        inferno_1 = Book.objects.get(name='Inferno 1')
+        inferno_2 = Book.objects.get(name='Inferno 2')
+        self.assertNotEqual(inferno_1.index.name, inferno_2.index.name)
 
     def test_file_with_no_extension(self):
-        url = reverse('model_files:cd.add')
-        pic_path = os.path.join(settings.TEST_FILES_DIR, 'btw_cover_no_ext')
+        url = reverse('model_files:book.add')
 
-        picture_file = open(pic_path, 'rb')
-        form_data = {
-            'name': CDS_DATA['btw']['name'],
-            'cover': picture_file
-        }
-        self.client.post(url, form_data)
-        picture_file.close()
+        with open(get_file_path('file_without_extension')) as pages_file:
+            form_data = {
+                'name': 'A Random Book',
+                'pages': pages_file
+            }
+            self.client.post(url, form_data)
 
-        cd_btw = get_cd(cd_key='btw')
-        assert cd_btw.cover.name.endswith('/btw_cover_no_ext')
+        book = Book.objects.get(name='A Random Book')
+        self.assertTrue(book.pages.name.endswith('/file_without_extension'))
 
     def test_same_file_with_no_extension_for_different_rows(self):
-        url = reverse('model_files:cd.add')
-        pic_path = os.path.join(settings.TEST_FILES_DIR, 'btw_cover_no_ext')
+        url = reverse('model_files:book.add')
 
-        picture_file = open(pic_path, 'rb')
-        form_data = {
-            'name': CDS_DATA['btw']['name'],
-            'cover': picture_file
-        }
+        index_file = open(get_file_path('file_without_extension'))
+        form_data = {'name': 'Book ABC',
+                     'index': index_file}
         self.client.post(url, form_data)
-        picture_file.close()
-
-        picture_file = open(pic_path, 'rb')
-        form_data = {
-            'name': CDS_DATA['gh']['name'],
-            'cover': picture_file
-        }
+        index_file.seek(0)
+        form_data = {'name': 'Book XYZ',
+                     'index': index_file}
         self.client.post(url, form_data)
-        picture_file.close()
+        index_file.close()
 
-        self.cover_count = 2
-        self.disc_count = 0
-        self.assert_pictures_count()
+        self.assertEqual(BookIndex.objects.count(), 2)
 
-        cd_btw = get_cd(cd_key='btw')
-        cd_gh = get_cd(cd_key='gh')
-        self.assertNotEqual(cd_btw.cover.name, cd_gh.cover.name)
+        abc = Book.objects.get(name='Book ABC')
+        xyz = Book.objects.get(name='Book XYZ')
+        self.assertNotEqual(abc.index.name, xyz.index.name)
 
     def test_save_file_without_using_form(self):
         file_name = 'manual.txt'
-        if sys.version_info.major == 2:  # python2
-            file_content_string = 'Test file content'
-        else:  # python3
-            file_content_string = b'Test file content'
-        file_content = ContentFile(file_content_string)
+        file_content_string = b'Test file content'
+        content_file = ContentFile(file_content_string)
 
         device = SoundDevice(name='BXPM 778')
-        device.instruction_manual.save(file_name, file_content)
+        device.instruction_manual.save(file_name, content_file)
         device.save()
         device_id = device.id
 
@@ -473,17 +331,16 @@ class AddEditAndDeleteCDsTests(TestCase):
             saved_device_file_content_string
         )
 
-    def test_save_file_without_using_form_with_accents(self):
+    def test_save_file_with_accents_without_using_form(self):
         file_name = 'manual.txt'
         if sys.version_info.major == 2:  # python2
-            file_content_string = 'Test file content with accents: áãüí'
+            file_content_string = 'Accents: áãüí'.encode('utf-8')
         else:  # python3
-            file_content_string = \
-                bytearray('Test file content with accents: áãüí', 'utf-8')
-        file_content = ContentFile(file_content_string)
+            file_content_string = bytearray('Accents: áãüí', 'utf-8')
+        content_file = ContentFile(file_content_string)
 
         device = SoundDevice(name='BXPM 778')
-        device.instruction_manual.save(file_name, file_content)
+        device.instruction_manual.save(file_name, content_file)
         device.save()
 
         saved_device = SoundDevice.objects.get()
@@ -497,46 +354,17 @@ class AddEditAndDeleteCDsTests(TestCase):
             saved_device_file_content_string
         )
 
-    def test_upload_text_file(self):
-        url = reverse('model_files:sound_device.add')
-
-        with open(TEXT_FILE_PATH, 'rb') as manual_file:
-            file_content_string = manual_file.read()
-            manual_file.seek(0)
-            form_data = {
-                'name': 'O BICHO',
-                'instruction_manual': manual_file
-            }
-            response = self.client.post(url, form_data, follow=True)
-            self.assertEqual(response.status_code, 200)
-
-        device = SoundDevice.objects.get()
-        device.instruction_manual.open('r')
-        device_file_content_string = device.instruction_manual.read()
-        device.instruction_manual.close()
-
-        self.assertEqual(
-            file_content_string,
-            device_file_content_string
-        )
-
     def test_storage_method_exists(self):
-        from django.core.files.storage import default_storage as storage
+        self.assertFalse(default_storage.exists('file_with_wrong_name'))
 
-        self.assertFalse(storage.exists('file_with_wrong_name'))
-
-        if sys.version_info.major == 2:  # python2
-            content_file = ContentFile('test content')
-        else:  # python3
-            content_file = ContentFile(bytearray('test content', 'utf-8'))
-
+        content_file = ContentFile(b'test content')
         device = SoundDevice(name='test_device')
-        device.instruction_manual.save('test_manual_file', content_file)
+        device.instruction_manual.save('test_file', content_file)
         device.save()
 
         saved_device = SoundDevice.objects.get()
         file_name = saved_device.instruction_manual.name
-        self.assertTrue(storage.exists(file_name))
+        self.assertTrue(default_storage.exists(file_name))
 
         saved_device.instruction_manual.delete()
-        self.assertFalse(storage.exists(file_name))
+        self.assertFalse(default_storage.exists(file_name))

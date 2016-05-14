@@ -8,12 +8,12 @@
 {% if form.instance.pk %}
     <hr/>
     <div align='center'>
-        <a href='{% url "model_files:cd.delete" pk=form.instance.pk %}'>Delete</a>
+        <a href='{% url "model_files:book.delete" pk=form.instance.pk %}'>Delete</a>
     </div>
 {% endif %}
 <hr/>
 <div align='center'>
-    <a href='{% url "model_files:cd.list" %}'>Back to list</a>
+    <a href='{% url "model_files:book.list" %}'>Back to list</a>
 </div>
 <hr/>
 <div align='center'>

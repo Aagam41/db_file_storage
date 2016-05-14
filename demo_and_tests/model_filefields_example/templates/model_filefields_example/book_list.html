@@ -8,7 +8,7 @@
     }
 </style>
 
-<a href='{% url "model_files:cd.add" %}'>Add CD</a>
+<a href='{% url "model_files:book.add" %}'>Add Book</a>
 
 <hr />
 
@@ -23,23 +23,26 @@
                     <a href='{{ obj.get_absolute_url }}'>{{ obj }}</a>
                 </td>
                 <td>
+                    {% if obj.index %}
+                        <a href='{% url "db_file_storage.download_file" %}?name={{ obj.index }}'>
+                            <i>Download index</i>
+                        </a>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if obj.pages %}
+                        <a href='{% url "db_file_storage.download_file" %}?name={{ obj.pages }}'>
+                            <i>Download pages</i>
+                        </a>
+                    {% endif %}
+                </td>
+                <td>
                     {% if obj.cover %}
                         <a href='{% url "db_file_storage.get_file" %}?name={{ obj.cover }}' target='_blank'>
                             <img height=64 width=64 src="{% url 'db_file_storage.get_file' %}?name={{ obj.cover }}" />
                         </a>
                         <br/>
                         <a href='{% url "db_file_storage.download_file" %}?name={{ obj.cover }}'>
-                            <i>Download</i>
-                        </a>
-                    {% endif %}
-                </td>
-                <td>
-                    {% if obj.disc %}
-                        <a href='{% url "db_file_storage.get_file" %}?name={{ obj.disc }}' target='_blank'>
-                            <img height=64 width=64 src="{% url 'db_file_storage.get_file' %}?name={{ obj.disc }}" />
-                        </a>
-                        <br/>
-                        <a href='{% url "db_file_storage.download_file" %}?name={{ obj.disc }}'>
                             <i>Download</i>
                         </a>
                     {% endif %}
