@@ -82,6 +82,11 @@ class DatabaseFileStorage(Storage):
     def _open(self, name, mode='rb'):
         assert mode[0] in 'rwab'
 
+        # Django stores filenames with forward slashes, even on Windows
+        # this reverses this proces on windows
+        if os.sep != "/":
+            name = name.replace('/', os.sep)
+
         storage_attrs = self._get_storage_attributes(name)
         model_class_path = storage_attrs['model_class_path']
         content_field = storage_attrs['content_field']
