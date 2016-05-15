@@ -51,7 +51,7 @@ class DatabaseFileStorage(Storage):
         random_str = get_random_string(7)
         while model_cls.objects.filter(
             **{filename_field: final_name}
-        ).exists():
+        ).exists():  # pragma: no cover
             final_name = '%s_(%s)%s' % (
                 stem, random_str,
                 ('.%s' % extension) if extension else ''
@@ -69,8 +69,10 @@ class DatabaseFileStorage(Storage):
                 filename
             ) = name.split(os.sep)
         except ValueError:
-            raise NameException('Wrong name format. Should be {}'.format(
-                NAME_FORMAT_HINT))
+            raise NameException(
+                'Wrong name format. Got {} ; should be {}'.format(
+                    name, NAME_FORMAT_HINT)
+            )
         return {
             'model_class_path': model_class_path,
             'content_field': content_field,
@@ -82,9 +84,7 @@ class DatabaseFileStorage(Storage):
     def _open(self, name, mode='rb'):
         assert mode[0] in 'rwab'
 
-        # Django stores filenames with forward slashes, even on Windows
-        # this reverses this proces on windows
-        if os.sep != "/":
+        if os.sep != '/':  # Windows fix (see a6d4707) # pragma: no cover
             name = name.replace('/', os.sep)
 
         storage_attrs = self._get_storage_attributes(name)
@@ -126,6 +126,8 @@ class DatabaseFileStorage(Storage):
         return new_filename
 
     def delete(self, name):
+        if os.sep != '/':  # Windows fix (see a6d4707) # pragma: no cover
+            name = name.replace('/', os.sep)
         storage_attrs = self._get_storage_attributes(name)
         model_class_path = storage_attrs['model_class_path']
         filename_field = storage_attrs['filename_field']
@@ -134,6 +136,8 @@ class DatabaseFileStorage(Storage):
         model_cls.objects.filter(**{filename_field: name}).delete()
 
     def exists(self, name):
+        if os.sep != '/':  # Windows fix (see a6d4707) # pragma: no cover
+            name = name.replace('/', os.sep)
         try:
             storage_attrs = self._get_storage_attributes(name)
         except NameException:
