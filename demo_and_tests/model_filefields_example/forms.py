@@ -15,6 +15,7 @@ class BookForm(forms.ModelForm):
         widgets = {
             'index': DBClearableFileInput,
             'pages': DBClearableFileInput,
+            'cover': DBClearableFileInput,
         }
 
 
@@ -25,6 +26,7 @@ class BookAdminForm(adminforms.ModelForm):
         widgets = {
             'index': DBAdminClearableFileInput,
             'pages': DBAdminClearableFileInput,
+            'cover': DBAdminClearableFileInput,
         }
 
 
