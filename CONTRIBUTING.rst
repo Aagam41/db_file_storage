@@ -24,4 +24,4 @@ In order to test your branch of db_file_storage, you'll have to
 
 #. ``cd`` into the ``demo_and_tests`` directory,
 #. `pip install <https://pypi.python.org/pypi/pip>`_ all the libraries specified in the `requirements file <https://github.com/victor-o-silva/db_file_storage/blob/master/demo_and_tests/requirements.txt>`_ in your environment (you might want to create and use a `virtual environment <http://docs.python-guide.org/en/latest/dev/virtualenvs/>`_),
-#. run ``python manage test`` from your shell.
+#. run ``python manage.py test`` from your shell.

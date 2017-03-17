@@ -42,7 +42,7 @@ In order to run the demo project, just
 #. download the project and ``cd`` into it,
 #. ``cd`` into the ``demo_and_tests`` directory,
 #. `pip-install <https://pypi.python.org/pypi/pip>`_ all the libraries specified in the `requirements file <https://github.com/victor-o-silva/db_file_storage/blob/master/demo_and_tests/requirements.txt>`_ in your environment (you might want to create and use a `virtual environment <http://docs.python-guide.org/en/latest/dev/virtualenvs/>`_),
-#. run ``python manage migrate`` and ``python manage runserver`` from your shell and
+#. run ``python manage.py migrate`` and ``python manage.py runserver`` from your shell and
 #. visit `http://localhost:8000 <http://localhost:8000>`_ in your browser.
 
 Tests & Contributing
