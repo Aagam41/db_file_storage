@@ -25,7 +25,7 @@ Django DB File Storage is a custom
 `file storage system <https://docs.djangoproject.com/en/dev/topics/files/#file-storage>`_
 for Django. Use it to save files in your database instead of your file system.
 
-Supports Python versions ``2.7``, ``3.4``, ``3.5`` & ``3.6``, and Django versions ``1.8``, ``1.9`` & ``1.10``.
+Supports Python versions ``2.7``, ``3.4``, ``3.5`` & ``3.6``, and Django versions ``1.8``, ``1.9``, ``1.10`` & ``1.11``.
 
 ``Python 3.3``, ``Django 1.6`` and ``Django 1.7`` are not supported anymore. If you HAVE to stick with them, you can use Django DB File Storage 0.3.3 `(PyPI) <https://pypi.python.org/pypi/django-db-file-storage/0.3.3>`_ `(GitHub) <https://github.com/victor-o-silva/db_file_storage/releases/tag/0.3.3>`_.
 
