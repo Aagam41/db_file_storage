@@ -66,6 +66,7 @@ db.sqlite3
 
 # IDEs
 .idea
+.vscode
 
 # Development test script
 run_dev_tests.sh
