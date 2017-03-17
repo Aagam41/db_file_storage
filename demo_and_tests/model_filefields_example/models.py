@@ -6,24 +6,28 @@ from db_file_storage.model_utils import delete_file, delete_file_if_needed
 
 
 class BookIndex(models.Model):
+    book_index_pk = models.AutoField(primary_key=True)
     bytes = models.TextField()
     filename = models.CharField(max_length=255)
     mimetype = models.CharField(max_length=50)
 
 
 class BookPages(models.Model):
+    book_pages_pk = models.AutoField(primary_key=True)
     bytes = models.TextField()
     filename = models.CharField(max_length=255)
     mimetype = models.CharField(max_length=50)
 
 
 class BookCover(models.Model):
+    book_cover_pk = models.AutoField(primary_key=True)
     bytes = models.TextField()
     filename = models.CharField(max_length=255)
     mimetype = models.CharField(max_length=50)
 
 
 class Book(models.Model):
+    book_pk = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100, unique=True)
     index = models.FileField(
         upload_to='model_filefields_example.BookIndex/bytes/filename/mimetype',

@@ -9,7 +9,7 @@ def delete_file_if_needed(instance, filefield_name):
     deletes the previous file (if any) from the database.
     Call this function immediately BEFORE saving the instance.
     """
-    if instance.id:
+    if instance.pk:
         model_class = type(instance)
 
         # Check if there is a file for the instance in the database
@@ -19,7 +19,7 @@ def delete_file_if_needed(instance, filefield_name):
             **{'%s__exact' % filefield_name: ''}
         ).exists():
             old_file = getattr(
-                model_class.objects.only(filefield_name).get(pk=instance.id),
+                model_class.objects.only(filefield_name).get(pk=instance.pk),
                 filefield_name
             )
         else:
