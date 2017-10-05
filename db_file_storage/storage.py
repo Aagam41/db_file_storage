@@ -10,6 +10,8 @@ from django.core.files.storage import Storage
 from django.core.urlresolvers import reverse
 from django.utils.crypto import get_random_string
 from django.utils.http import urlencode
+from django.utils.deconstruct import deconstructible
+
 
 
 NAME_FORMAT_HINT = '<app>.<model>/<content_field>/<mimetype_field>' \
@@ -19,7 +21,7 @@ NAME_FORMAT_HINT = '<app>.<model>/<content_field>/<mimetype_field>' \
 class NameException(Exception):
     pass
 
-
+@deconstructible
 class DatabaseFileStorage(Storage):
     """File storage system that saves models' FileFields in the database.
 
