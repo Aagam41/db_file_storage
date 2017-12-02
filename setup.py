@@ -6,13 +6,13 @@ readme_file = open('README.rst')
 
 setup(
     name='django-db-file-storage',
-    version='0.4.3',
+    version='0.4.4',
     author='Victor Oliveira da Silva',
     author_email='victor_o_silva@hotmail.com',
     packages=['db_file_storage'],
     url='https://github.com/victor-o-silva/db_file_storage',
     download_url='https://github.com/victor-o-silva/db_file_storage'
-                 '/tarball/0.4.3',
+                 '/tarball/0.4.4',
     description="Custom FILE_STORAGE for Django. Saves files "
                 "in your database instead of your file system.",
     long_description=readme_file.read(),
@@ -31,6 +31,7 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
     ],
 )
 
