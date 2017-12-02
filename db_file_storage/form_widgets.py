@@ -13,27 +13,37 @@ else:  # python3
 
 def db_file_widget(cls):
     """Edit the download-link inner text."""
-    def get_template_substitution_values(self, value):
-        subst = super(cls, self).get_template_substitution_values(value)
-        unquoted = unquote(value.url.split('%2F')[-1])
+
+    def get_link_display(url):
+        unquoted = unquote(url.split('%2F')[-1])
         if sys.version_info.major == 2:  # python 2
             from django.utils.encoding import force_unicode
             unquoted = force_unicode(unquoted)
-        subst['initial'] = escape(unquoted)
+        return escape(unquoted)
+
+    def get_template_substitution_values(self, value):
+        # Used by Django < 1.11
+        subst = super(cls, self).get_template_substitution_values(value)
+        subst['initial'] = get_link_display(value.url)
         return subst
-    setattr(
-        cls,
-        'get_template_substitution_values',
-        get_template_substitution_values
-    )
+    setattr(cls,
+            'get_template_substitution_values',
+            get_template_substitution_values)
+
+    def get_context(self, name, value, attrs):
+        context = super(cls, self).get_context(name, value, attrs)
+        context['widget']['display'] = get_link_display(value.url)
+        return context
+    setattr(cls, 'get_context', get_context)
+
     return cls
 
 
 @db_file_widget
 class DBClearableFileInput(ClearableFileInput):
-    pass
+    template_name = 'db_file_storage/widgets/clearable_file_input.html'
 
 
 @db_file_widget
 class DBAdminClearableFileInput(AdminFileWidget):
-    pass
+    template_name = 'db_file_storage/widgets/admin_clearable_file_input.html'
