@@ -13,13 +13,13 @@ from django.utils.http import urlencode
 from django.utils.deconstruct import deconstructible
 
 
-
 NAME_FORMAT_HINT = '<app>.<model>/<content_field>/<mimetype_field>' \
                    '/<filename_field>/<filename>'
 
 
 class NameException(Exception):
     pass
+
 
 @deconstructible
 class DatabaseFileStorage(Storage):
@@ -118,7 +118,12 @@ class DatabaseFileStorage(Storage):
         new_filename = self._get_unique_filename(model_cls,
                                                  filename_field, name)
         encoded_bytes = self._get_encoded_bytes_from_file(content)
-        mimetype = getattr(content.file, 'content_type', 'text/plain')
+
+        mimetype = (
+            getattr(content, 'content_type', None) or  # Django >= 1.11
+            getattr(content.file, 'content_type', None) or  # Django < 1.11
+            'text/plain'  # Fallback
+        )
 
         model_cls.objects.create(**{
             content_field: encoded_bytes,
