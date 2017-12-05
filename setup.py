@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import os
 from distutils.core import setup
 
 readme_file = open('README.rst')
@@ -10,6 +11,9 @@ setup(
     author='Victor Oliveira da Silva',
     author_email='victor_o_silva@hotmail.com',
     packages=['db_file_storage'],
+    package_data={
+        'db_file_storage': ['templates/db_file_storage/widgets/*']
+    },
     url='https://github.com/victor-o-silva/db_file_storage',
     download_url='https://github.com/victor-o-silva/db_file_storage'
                  '/tarball/0.4.4',
@@ -17,7 +21,7 @@ setup(
                 "in your database instead of your file system.",
     long_description=readme_file.read(),
     install_requires=[
-        "Django",
+        "Django<2.0",
     ],
     classifiers=[
         'Framework :: Django',
