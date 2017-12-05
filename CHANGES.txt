@@ -18,3 +18,4 @@ v0.4.1,  05-14-2016 -- Fixing Windows compatibility (finally)
 v0.4.2,  03-17-2017 -- Support PKs with custom names; support Python 3.6 & Django 1.10
 v0.4.3,  10-09-2017 -- Let Django serialize DatabaseFileStorage instances
 v0.4.4,  12-02-2017 -- Support Django 1.11
+v0.4.5,  12-05-2017 -- Bugfix: include templates in installation

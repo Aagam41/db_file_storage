@@ -7,7 +7,7 @@ readme_file = open('README.rst')
 
 setup(
     name='django-db-file-storage',
-    version='0.4.4',
+    version='0.4.5',
     author='Victor Oliveira da Silva',
     author_email='victor_o_silva@hotmail.com',
     packages=['db_file_storage'],
