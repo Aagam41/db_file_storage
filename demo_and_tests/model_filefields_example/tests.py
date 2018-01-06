@@ -72,6 +72,12 @@ class AddEditAndDeleteBooksTestCase(TestCase):
         form = BookAdminForm(instance=book)
         self.assertIn('>inferno_index.txt</a>', form['index'].as_widget())
 
+    def test_form_widget_with_no_value(self):
+        form = BookForm()
+        form['index'].as_widget()
+        admin_form = BookAdminForm()
+        admin_form['index'].as_widget()
+
     def verify_file(self, download_url, file_name):
         response = self.client.get(download_url)
         with open(get_file_path(file_name), 'rb') as the_file:

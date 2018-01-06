@@ -1,7 +1,9 @@
 {% if widget.is_initial %}
     <p class="file-upload">
         {{ widget.initial_text }}:
-        <a href="{{ widget.value.url }}">{{ widget.display }}</a>
+        {% if widget.value %}
+            <a href="{{ widget.value.url }}">{{ widget.display }}</a>
+        {% endif %}
         {% if not widget.required %}
             <span class="clearable-file-input">
             <input type="checkbox" name="{{ widget.checkbox_name }}" id="{{ widget.checkbox_id }}" />
@@ -11,7 +13,7 @@
         {{ widget.input_text }}:
 {% endif %}
 
-<input type="{{ widget.type }}" name="{{ widget.name }}"{% include "django/forms/widgets/attrs.html" %} />
+<input type="{{ widget.type }}" name="{{ widget.name }}" {% include "django/forms/widgets/attrs.html" %} />
 
 {% if widget.is_initial %}</p>{% endif %}
     

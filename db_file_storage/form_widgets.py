@@ -32,7 +32,8 @@ def db_file_widget(cls):
 
     def get_context(self, name, value, attrs):
         context = super(cls, self).get_context(name, value, attrs)
-        context['widget']['display'] = get_link_display(value.url)
+        if value:
+            context['widget']['display'] = get_link_display(value.url)
         return context
     setattr(cls, 'get_context', get_context)
 
