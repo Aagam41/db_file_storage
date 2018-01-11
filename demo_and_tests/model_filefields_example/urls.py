@@ -1,13 +1,13 @@
 # django imports
-from django.conf.urls import url
-from django.core.urlresolvers import reverse_lazy
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 # project imports
 from .forms import BookForm, SoundDeviceForm
 from .models import Book, SoundDevice
+from db_file_storage.compat import url, reverse_lazy
 
+app_name = 'model_filefields_example'
 
 urlpatterns = [
     url(

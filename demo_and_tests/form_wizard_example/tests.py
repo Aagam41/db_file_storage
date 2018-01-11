@@ -3,11 +3,11 @@
 from __future__ import unicode_literals
 import os
 # django
-from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.test import TestCase
 # third party
 from db_file_storage.storage import FixedModelDatabaseFileStorage
+from db_file_storage.compat import reverse
 # project
 from form_wizard_example.models import FormWizardTempFile
 
