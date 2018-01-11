@@ -8,12 +8,13 @@ import sys
 from django.core.files.storage import default_storage
 from django.conf import settings
 from django.core.files.base import ContentFile
-from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.utils.http import urlencode
 # project
 from .forms import BookForm, BookAdminForm
 from .models import Book, BookIndex, BookPages, SoundDevice
+# third party
+from db_file_storage.compat import reverse
 
 
 def get_file_path(file_name):
@@ -34,7 +35,7 @@ class AddEditAndDeleteBooksTestCase(TestCase):
 
         # Valid name
         download_url = reverse('db_file_storage.download_file')
-        download_url += '?' + urlencode({'name': book.index})
+        download_url += '?' + urlencode({'name': str(book.index)})
         response = self.client.get(download_url)
         self.assertEqual(response.status_code, 200)
 

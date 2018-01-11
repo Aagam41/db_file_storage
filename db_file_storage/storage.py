@@ -7,10 +7,10 @@ import os
 from django.apps import apps
 from django.core.files.base import ContentFile
 from django.core.files.storage import Storage
-from django.core.urlresolvers import reverse
 from django.utils.crypto import get_random_string
 from django.utils.http import urlencode
 from django.utils.deconstruct import deconstructible
+from db_file_storage.compat import reverse
 
 
 NAME_FORMAT_HINT = '<app>.<model>/<content_field>/<mimetype_field>' \
@@ -36,7 +36,7 @@ class DatabaseFileStorage(Storage):
     def _get_encoded_bytes_from_file(self, _file):
         _file.seek(0)
         file_content = _file.read()
-        return base64.b64encode(file_content)
+        return base64.b64encode(file_content).decode('ascii')
 
     def _get_file_from_encoded_bytes(self, encoded_bytes):
         file_buffer = base64.b64decode(encoded_bytes)

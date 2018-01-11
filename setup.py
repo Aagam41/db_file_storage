@@ -21,7 +21,7 @@ setup(
                 "in your database instead of your file system.",
     long_description=readme_file.read(),
     install_requires=[
-        "Django<2.0",
+        "Django",
     ],
     classifiers=[
         'Framework :: Django',
