@@ -3,14 +3,15 @@
 # python
 import base64
 import os
-# django
+# third party
 from django.apps import apps
 from django.core.files.base import ContentFile
 from django.core.files.storage import Storage
 from django.utils.crypto import get_random_string
 from django.utils.http import urlencode
 from django.utils.deconstruct import deconstructible
-from db_file_storage.compat import reverse
+# project
+from .compat import reverse
 
 
 NAME_FORMAT_HINT = '<app>.<model>/<content_field>/<mimetype_field>' \

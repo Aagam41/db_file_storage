@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import os
 from distutils.core import setup
 
 readme_file = open('README.rst')
@@ -21,7 +20,7 @@ setup(
                 "in your database instead of your file system.",
     long_description=readme_file.read(),
     install_requires=[
-        "Django",
+        'Django',
     ],
     classifiers=[
         'Framework :: Django',
@@ -29,6 +28,7 @@ setup(
         'Framework :: Django :: 1.9',
         'Framework :: Django :: 1.10',
         'Framework :: Django :: 1.11',
+        'Framework :: Django :: 2.0',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python',

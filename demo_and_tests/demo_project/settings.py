@@ -52,10 +52,11 @@ INSTALLED_APPS = (
     # project
     'form_wizard_example',
     'model_filefields_example',
-
 )
 
-MIDDLEWARE = [
+# MIDDLEWARE_CLASSES: Django < 1.10
+# MIDDLEWARE -> Django >= 1.10
+MIDDLEWARE = MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',

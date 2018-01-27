@@ -1,6 +1,6 @@
 # python
 import sys
-# django
+# third party
 from django.utils.html import escape
 from django.forms.widgets import ClearableFileInput
 from django.contrib.admin.widgets import AdminFileWidget

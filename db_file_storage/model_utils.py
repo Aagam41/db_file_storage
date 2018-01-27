@@ -1,5 +1,5 @@
 # project
-from db_file_storage.storage import DatabaseFileStorage
+from .storage import DatabaseFileStorage
 
 
 def delete_file_if_needed(instance, filefield_name):

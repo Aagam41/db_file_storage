@@ -2,6 +2,7 @@
 from .views import SongLyricsWizard
 from db_file_storage.compat import url
 
+
 app_name = 'form_wizard_example'
 
 urlpatterns = [

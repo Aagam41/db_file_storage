@@ -1,8 +1,7 @@
 # project
-from db_file_storage import views
-from db_file_storage.compat import url
+from . import views
+from .compat import url
 
-# app_name = 'db_file_storage'
 
 urlpatterns = [
     url(r'^download/', views.get_file, {'add_attachment_headers': True},
