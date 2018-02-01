@@ -1,4 +1,4 @@
-Django==2.0.1
+Django==2.0.2
 django-formtools>=1.0
 django-nose>=1.4
 Pillow==5.0.0
