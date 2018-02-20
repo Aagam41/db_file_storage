@@ -21,16 +21,25 @@ class Command(BaseCommand):
         """
 
     def handle(self, *args, **options):
-        for app, tbl, fld in self.get_media_fields():
+        for app, tbl, model, fld in self.get_media_fields():
             if re.match(r'^\w+\.\w+/bytes/filename/mimetype$', fld.upload_to):
+                kwargs = {
+                    '{0}__gt'.format(fld.name): '',
+                }
+                qs_files = model.objects.select_for_update().filter(**kwargs).only(
+                        model._meta.pk.name, fld.name)
+                from pdb import set_trace; set_trace()
+
+                '''
                 self.stdout.write(app.label)
                 self.stdout.write(tbl)
                 self.stdout.write(fld.name)
                 self.stdout.write('')
+                '''
 
     def get_media_fields(self):
         for app in apps.get_app_configs():
             for tbl, model in app.models.items():
                 for fld in model._meta.get_fields():
                     if isinstance(fld, models.FileField):
-                        yield (app, tbl, fld)
+                        yield (app, tbl, model, fld)
