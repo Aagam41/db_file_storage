@@ -15,7 +15,7 @@ DB_PATTERN = re.compile(r'^\w+\.\w+/bytes/filename/mimetype$')
 
 
 class Command(BaseCommand):
-    help = _("Copy separate media files from file system into database after the migration to db_file_storage.")
+    help = _("Copy older media files into database after the migration to db_file_storage. See --help for more.")
 
     def __init__(self):
         super(Command, self).__init__()
@@ -31,10 +31,24 @@ class Command(BaseCommand):
         parser.description = """
             ------------------------------------------------------------
             Copy separate media files from file system into database after the migration to db_file_storage.
+
+            1. Migrate to db_file_storage first (change models, do makemigrations & migrate),
+            2. Run './manage.py files2db' to copy earlier media into db.
+
+            If --sandbox is used, media files from (earlier) standard storage will NOT be copied into db storage.
+              With --sandbox this can be used before migration too. Without it this will fail before the migration. 
+
+            Without --sandbox the media files will be converted. (Repeated run will show that media are in db.)
+              Original files in MEDIA_ROOT remain unchanged.
             ------------------------------------------------------------
         """
+        parser.add_argument('-s', '--sandbox', action="store_true",
+                            help=_("sandbox; do NOT copy media from standard storage into db storage"))
 
     def handle(self, *args, **options):
+        sandbox = options.get('sandbox')
+
+        total_std = 0
         for app, tbl, model, fld in self.get_media_fields():
             if re.match(DB_PATTERN, fld.upload_to):
                 kwargs = {
@@ -50,23 +64,33 @@ class Command(BaseCommand):
                         cnt_non_db += 1
                         maybe_file = os.path.join(self.MEDIA_ROOT, field_file.name)
                         if os.path.isfile(maybe_file):
-                            self.cp(field_file, maybe_file)
+                            if not sandbox:
+                                self.cp(field_file, maybe_file)
                         else:
                             cnt_format_unknown += 1
+                total_std += cnt_non_db - cnt_format_unknown
                 self.report(app, tbl, fld, 'db', len(media_files), cnt_non_db, cnt_format_unknown)
             else:
-                self.report(app, tbl, fld, 'other')
+                self.report(app, tbl, fld, 'non-db')
+
+        if total_std:
+            if sandbox:
+                msg = _('No conversion made. Count of files to be converted in non-sandbox run')
+            else:
+                msg = _('Count of files which were copied into db')
+            self.stdout.write('%s: %s' % (msg, total_std))
 
     @staticmethod
-    def cp(field_file, media_file):
-        new_name = os.path.basename(media_file)
-        with open(media_file, 'rb') as f:
+    def cp(field_file, filename):
+        new_name = os.path.basename(filename)
+        with open(filename, 'rb') as f:
             field_file.save(new_name, File(f))
 
     def report(self, app, tbl, fld, storage, cntfiles=None, cnt_non_db=0, cnt_format_unknown=0):
+        storage += ' storage'
         if cntfiles is not None:
-            storage = '%s storage - contains %s file(s): %s std format - %s%s db format' % (
-                    storage, cntfiles, cnt_non_db - cnt_format_unknown,
+            storage += ' - contains %s file(s): %s std format - %s%s db format' % (
+                    cntfiles, cnt_non_db - cnt_format_unknown,
                     '%s unknown - ' % cnt_format_unknown if cnt_format_unknown else '', cntfiles - cnt_non_db)
         self.stdout.write('%s %s %s - %s' % (app.label, tbl, fld.name, storage))
 
