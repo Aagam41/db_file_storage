@@ -89,8 +89,13 @@ class Command(BaseCommand):
     def report(self, app, tbl, fld, storage, cntfiles=None, cnt_non_db=0, cnt_format_unknown=0):
         storage += ' storage'
         if cntfiles is not None:
-            storage += ' - contains %s file(s): %s std format - %s%s db format' % (
-                    cntfiles, cnt_non_db - cnt_format_unknown,
+            cnt_std = cnt_non_db - cnt_format_unknown
+            if cnt_std and not sandbox:
+                infomsg = ' (%s)' % _('will be copied into db')
+            else:
+                infomsg = ''
+            storage += ' - contains %s file(s): %s std format%s - %s%s db format' % (
+                    cntfiles, cnt_std, infomsg,
                     '%s unknown - ' % cnt_format_unknown if cnt_format_unknown else '', cntfiles - cnt_non_db)
         self.stdout.write('%s %s %s - %s' % (app.label, tbl, fld.name, storage))
 
