@@ -57,7 +57,7 @@ copyright = '{0}, {1}'.format(datetime.datetime.now().strftime('%Y'), author)
 # built documents.
 #
 # The short X.Y version.
-version = u'0.5.0'
+version = u'0.5.1'
 # The full version, including alpha/beta/rc tags.
 release = version
 
