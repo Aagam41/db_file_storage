@@ -20,7 +20,7 @@ class Command(BaseCommand):
     def __init__(self):
         super(Command, self).__init__()
         try:
-            self.MEDIA_ROOT = getattr(settings, 'MMEDIA_ROOT')
+            self.MEDIA_ROOT = getattr(settings, 'MEDIA_ROOT')
         except AttributeError:
             self.stderr.write(
                     'Please configure MEDIA_ROOT in your settings. '
