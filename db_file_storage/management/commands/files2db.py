@@ -30,7 +30,7 @@ class Command(BaseCommand):
         parser.formatter_class = argparse.RawTextHelpFormatter
         parser.description = """
             ------------------------------------------------------------
-            Copy separate media files from file system into database after the migration to db_file_storage.
+            Use this after the migration to db_file_storage to copy earlier media files from file system into database.
 
             1. Migrate to db_file_storage first (change models, do makemigrations & migrate),
             2. Run './manage.py files2db' to copy earlier media into db.
@@ -69,7 +69,7 @@ class Command(BaseCommand):
                         else:
                             cnt_format_unknown += 1
                 total_std += cnt_non_db - cnt_format_unknown
-                self.report(app, tbl, fld, 'db', len(media_files), cnt_non_db, cnt_format_unknown)
+                self.report(app, tbl, fld, 'db', len(media_files), cnt_non_db, cnt_format_unknown, hideinfo=sandbox)
             else:
                 self.report(app, tbl, fld, 'non-db')
 
@@ -86,11 +86,11 @@ class Command(BaseCommand):
         with open(filename, 'rb') as f:
             field_file.save(new_name, File(f))
 
-    def report(self, app, tbl, fld, storage, cntfiles=None, cnt_non_db=0, cnt_format_unknown=0):
+    def report(self, app, tbl, fld, storage, cntfiles=None, cnt_non_db=0, cnt_format_unknown=0, hideinfo=True):
         storage += ' storage'
         if cntfiles is not None:
             cnt_std = cnt_non_db - cnt_format_unknown
-            if cnt_std and not sandbox:
+            if cnt_std and not hideinfo:
                 infomsg = ' (%s)' % _('will be copied into db')
             else:
                 infomsg = ''
