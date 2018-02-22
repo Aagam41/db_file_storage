@@ -67,7 +67,7 @@ class Command(BaseCommand):
         if cntfiles is not None:
             storage = '%s storage - contains %s file(s): %s std format - %s%s db format' % (
                     storage, cntfiles, cnt_non_db - cnt_format_unknown,
-                    '%s unknown - ' if cnt_format_unknown else '', cntfiles - cnt_non_db)
+                    '%s unknown - ' % cnt_format_unknown if cnt_format_unknown else '', cntfiles - cnt_non_db)
         self.stdout.write('%s %s %s - %s' % (app.label, tbl, fld.name, storage))
 
     @staticmethod
