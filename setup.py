@@ -9,7 +9,7 @@ setup(
     version='0.5.0',
     author='Victor Oliveira da Silva',
     author_email='victor_o_silva@hotmail.com',
-    packages=['db_file_storage'],
+    packages=['db_file_storage', 'db_file_storage.management'],
     package_data={
         'db_file_storage': ['templates/db_file_storage/widgets/*']
     },
