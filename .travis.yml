@@ -13,11 +13,11 @@ env:
     - DJANGO="django==1.9.13"
     - DJANGO="django==1.10.8"
     - DJANGO="django==1.11.9"
-    - DJANGO="django==2.0.2"
+    - DJANGO="django==2.0.4"
 matrix:
   exclude:
    - python: "2.7"
-     env: DJANGO="django==2.0.2"
+     env: DJANGO="django==2.0.4"
 install:
     - pip install Pillow
     - pip install $DJANGO
