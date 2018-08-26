@@ -19,10 +19,6 @@ matrix:
       env: DJANGO="django==2.1"
   include:
     - python: 3.7
-      env: DJANGO="django==1.11.9"
-      dist: xenial
-      sudo: true
-    - python: 3.7
       env: DJANGO="django==2.0.6"
       dist: xenial
       sudo: true
