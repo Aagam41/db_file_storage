@@ -5,19 +5,31 @@ cache:
     - $HOME/.cache/pip
 python:
     - "2.7"
-    - "3.4"
     - "3.5"
     - "3.6"
 env:
-    - DJANGO="django==1.8.18"
-    - DJANGO="django==1.9.13"
-    - DJANGO="django==1.10.8"
     - DJANGO="django==1.11.9"
     - DJANGO="django==2.0.6"
+    - DJANGO="django==2.1"
 matrix:
   exclude:
-   - python: "2.7"
-     env: DJANGO="django==2.0.6"
+    - python: "2.7"
+      env: DJANGO="django==2.0.6"
+    - python: "2.7"
+      env: DJANGO="django==2.1"
+  include:
+    - python: 3.7
+      env: DJANGO="django==1.11.9"
+      dist: xenial
+      sudo: true
+    - python: 3.7
+      env: DJANGO="django==2.0.6"
+      dist: xenial
+      sudo: true
+    - python: 3.7
+      env: DJANGO="django==2.1"
+      dist: xenial
+      sudo: true
 install:
     - pip install Pillow
     - pip install $DJANGO
