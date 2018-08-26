@@ -7,6 +7,7 @@ import os
 from django.apps import apps
 from django.core.files.base import ContentFile
 from django.core.files.storage import Storage
+from django.db.models import BinaryField
 from django.utils.crypto import get_random_string
 from django.utils.http import urlencode
 from django.utils.deconstruct import deconstructible
@@ -34,10 +35,13 @@ class DatabaseFileStorage(Storage):
         app_label, model_name = model_class_path.rsplit('.', 1)
         return apps.get_model(app_label, model_name)
 
-    def _get_encoded_bytes_from_file(self, _file):
+    def _get_encoded_bytes_from_file(self, content_field, _file):
         _file.seek(0)
         file_content = _file.read()
-        return base64.b64encode(file_content).decode('ascii')
+        encoded = base64.b64encode(file_content)
+        if isinstance(content_field, BinaryField):
+            return encoded
+        return encoded.decode('utf-8')
 
     def _get_file_from_encoded_bytes(self, encoded_bytes):
         file_buffer = base64.b64decode(encoded_bytes)
@@ -111,14 +115,15 @@ class DatabaseFileStorage(Storage):
     def _save(self, name, content):
         storage_attrs = self._get_storage_attributes(name)
         model_class_path = storage_attrs['model_class_path']
-        content_field = storage_attrs['content_field']
-        filename_field = storage_attrs['filename_field']
-        mimetype_field = storage_attrs['mimetype_field']
+        content_field_name = storage_attrs['content_field']
+        filename_field_name = storage_attrs['filename_field']
+        mimetype_field_name = storage_attrs['mimetype_field']
 
         model_cls = self._get_model_cls(model_class_path)
-        new_filename = self._get_unique_filename(model_cls,
-                                                 filename_field, name)
-        encoded_bytes = self._get_encoded_bytes_from_file(content)
+        new_filename = self._get_unique_filename(model_cls, filename_field_name, name)
+
+        content_field = model_cls._meta.get_field(content_field_name)
+        encoded_bytes = self._get_encoded_bytes_from_file(content_field, content)
 
         mimetype = (
             getattr(content, 'content_type', None) or  # Django >= 1.11
@@ -127,9 +132,9 @@ class DatabaseFileStorage(Storage):
         )
 
         model_cls.objects.create(**{
-            content_field: encoded_bytes,
-            filename_field: new_filename,
-            mimetype_field: mimetype,
+            content_field_name: encoded_bytes,
+            filename_field_name: new_filename,
+            mimetype_field_name: mimetype,
         })
         return new_filename
 

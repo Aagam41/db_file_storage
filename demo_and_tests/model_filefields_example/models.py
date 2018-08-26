@@ -21,7 +21,7 @@ class BookPages(models.Model):
 
 class BookCover(models.Model):
     book_cover_pk = models.AutoField(primary_key=True)
-    bytes = models.TextField()
+    bytes = models.BinaryField()
     filename = models.CharField(max_length=255)
     mimetype = models.CharField(max_length=50)
 

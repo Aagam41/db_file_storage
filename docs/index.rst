@@ -56,11 +56,11 @@ Models
 ------
 
 
-For each FileField you want to save, you will need a separated model to hold the file in the database. I will refer to this extra model as the **FileModel**. The FileModel must have at least these fields:
+For each FileField you want to save, you will need a separated model to hold the file in the database. I will refer to this extra model as the **FileModel**. The FileModel must have exactly these fields:
 
-* a ``TextField()`` which will hold the encoded contents of the file
-* a ``CharField(max_length=255)`` which will hold the file's name
-* a ``CharField(max_length=50)`` which will hold the file's MIME type
+* either a ``TextField()`` or a ``BinaryField()`` - will hold the encoded contents of the file
+* a ``CharField(max_length=255)`` - will hold the file's name
+* a ``CharField(max_length=50)`` - will hold the file's MIME type
 
 For example (in a models.py file, inside an app called 'console')::
 
