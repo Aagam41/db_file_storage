@@ -1,4 +1,4 @@
 Django==3.0.2
 django-formtools==2.2
-django-nose
+django-nose==1.4.6
 Pillow
