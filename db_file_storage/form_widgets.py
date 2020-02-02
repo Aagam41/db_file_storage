@@ -21,15 +21,6 @@ def db_file_widget(cls):
             unquoted = force_unicode(unquoted)
         return escape(unquoted)
 
-    def get_template_substitution_values(self, value):
-        # Used by Django < 1.11
-        subst = super(cls, self).get_template_substitution_values(value)
-        subst['initial'] = get_link_display(value.url)
-        return subst
-    setattr(cls,
-            'get_template_substitution_values',
-            get_template_substitution_values)
-
     def get_context(self, name, value, attrs):
         context = super(cls, self).get_context(name, value, attrs)
         if value and hasattr(value, 'url'):
