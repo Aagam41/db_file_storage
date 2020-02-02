@@ -4,7 +4,7 @@ from distutils.core import setup
 
 readme_file = open('README.rst')
 
-VERSION = '0.5.3'
+VERSION = '0.5.4'
 
 setup(
     name='django-db-file-storage',
@@ -27,8 +27,8 @@ setup(
     classifiers=[
         'Framework :: Django',
         'Framework :: Django :: 1.11',
-        'Framework :: Django :: 2.0',
-        'Framework :: Django :: 2.1',
+        'Framework :: Django :: 2.2',
+        'Framework :: Django :: 3.0',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python',
@@ -38,6 +38,7 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
     ],
 )
 
