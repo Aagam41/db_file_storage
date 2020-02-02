@@ -64,6 +64,9 @@ db.sqlite3
 # PyEnv
 .python-version
 
+# pipenv
+Pipfile*
+
 # IDEs
 .idea
 .vscode
@@ -73,3 +76,6 @@ run_dev_tests.sh
 
 # Backup files
 *~
+
+# Virtualenvs
+.venv*/
