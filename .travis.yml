@@ -19,21 +19,21 @@ matrix:
     - python: 3.6
       env: DJANGO="django==2.2.9" FORMTOOLS="django-formtools==2.2"
     - python: 3.6
-      env: DJANGO="django==3.0.2" FORMTOOLS="django-formtools==2.2"
+      env: DJANGO="django==3.0.3" FORMTOOLS="django-formtools==2.2"
     #
     - python: 3.7
       env: DJANGO="django==1.11.27" FORMTOOLS="django-formtools==2.2"
     - python: 3.7
       env: DJANGO="django==2.2.9" FORMTOOLS="django-formtools==2.2"
     - python: 3.7
-      env: DJANGO="django==3.0.2" FORMTOOLS="django-formtools==2.2"
+      env: DJANGO="django==3.0.3" FORMTOOLS="django-formtools==2.2"
     #
     - python: 3.8
       env: DJANGO="django==1.11.27" FORMTOOLS="django-formtools==2.2"
     - python: 3.8
       env: DJANGO="django==2.2.9" FORMTOOLS="django-formtools==2.2"
     - python: 3.8
-      env: DJANGO="django==3.0.2" FORMTOOLS="django-formtools==2.2"
+      env: DJANGO="django==3.0.3" FORMTOOLS="django-formtools==2.2"
 
 install:
     - pip install Pillow
