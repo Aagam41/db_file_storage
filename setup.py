@@ -4,7 +4,7 @@ from distutils.core import setup
 
 readme_file = open('README.rst')
 
-VERSION = '0.5.4'
+VERSION = '0.5.5'
 
 setup(
     name='django-db-file-storage',
