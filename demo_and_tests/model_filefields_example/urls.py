@@ -6,6 +6,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .forms import BookForm, SoundDeviceForm
 from .models import Book, SoundDevice
 from db_file_storage.compat import url, reverse_lazy
+from db_file_storage import views as db_file_storage_views
 
 
 app_name = 'model_filefields_example'
@@ -46,6 +47,15 @@ urlpatterns = [
             success_url=reverse_lazy('model_files:book.list')
         ),
         name='book.delete'
+    ),
+    url(
+        r'^book-cover-download/',
+        db_file_storage_views.get_file,
+        {
+            'add_attachment_headers': True,
+            'extra_headers': {'Content-Language': 'en'}
+        },
+        name='book.download_cover'
     ),
     url(
         r'^sound_devices/add/$',

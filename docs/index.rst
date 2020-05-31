@@ -180,6 +180,50 @@ Both views must be passed a GET parameter named ``name``, and the value of this 
         <i>Click here to download the picture</i>
     </a>
 
+Customizing HTTP headers
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you need to set extra HTTP headers, you can create your own URL patterns using Django Database File Storage's views and customize the response headers with the keyword argument ``extra_headers``.
+
+
+First, define the new URL patterns in your app's urls.py::
+
+    from db_file_storage import views as db_file_storage_views
+
+    urlpatterns = [
+      url(
+           r'^console-picture-view/',
+           db_file_storage_views.get_file,
+           {
+               'add_attachment_headers': False,
+               'extra_headers': {'Content-Language': 'en'}
+           },
+           name='console.view_picture'
+       ),
+       url(
+           r'^console-picture-download/',
+           db_file_storage_views.get_file,
+           {
+               'add_attachment_headers': True,  # Shows a "File Download" box in the browser
+               'extra_headers': {'Content-Language': 'en'}
+           },
+           name='console.download_picture'
+       ),
+   ]
+
+Then, use the new URLs in the templates::
+
+   <!-- The url used to VIEW the file: -->
+    <img src="{% url 'console.view_picture' %}?name={{ console.picture }}" />
+
+    <br/>
+
+    <!-- The url used to DOWNLOAD the file: -->
+    <a href='{% url "console.download_picture" %}?name={{ console.picture }}'>
+        <i>Click here to download the picture</i>
+    </a>
+
+In the `demo project <https://github.com/victor-o-silva/db_file_storage/tree/master/demo_and_tests>`_ there is a working example with custom HTTP headers in the responses. It's the cover download link in the books list.
 
 How to use (for `Form Wizards <http://django-formtools.readthedocs.org/en/latest/wizard.html>`_)
 ================================================================================================

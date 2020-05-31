@@ -23,7 +23,7 @@ def get_file_path(file_name):
 
 class AddEditAndDeleteBooksTestCase(TestCase):
 
-    def test_download_with_invalid_name(self):
+    def test_download(self):
         # Create book
         save_url = reverse('model_files:book.add')
         index_file = open(get_file_path('inferno_index.txt'))
@@ -44,6 +44,24 @@ class AddEditAndDeleteBooksTestCase(TestCase):
         download_url += '?' + urlencode({'name': 'invalid_name'})
         response = self.client.get(download_url)
         self.assertEqual(response.status_code, 400)
+
+    def test_download_with_extra_headers(self):
+        # Create book
+        save_url = reverse('model_files:book.add')
+        cover_file = open(get_file_path('book.png'), 'rb')
+        form_data = {'name': 'Inferno',
+                     'cover': cover_file}
+        self.client.post(save_url, form_data, follow=True)
+        cover_file.close()
+        book = Book.objects.get(name='Inferno')
+
+        # Valid name
+        download_url = reverse('model_files:book.download_cover')
+        download_url += '?' + urlencode({'name': str(book.cover)})
+        response = self.client.get(download_url)
+        self.assertEqual(response.status_code, 200)
+        print(dir(response))
+        self.assertEqual(response['Content-Language'], 'en')
 
     def test_form_widget_shows_proper_filename(self):
         # Create book
