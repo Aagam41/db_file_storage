@@ -1,7 +1,11 @@
 # third party
 from django.http import HttpResponse, HttpResponseBadRequest
-from django.utils.translation import ugettext as _
 from wsgiref.util import FileWrapper
+try:
+    from django.utils.translation import ugettext as _
+except ImportError:
+    from django.utils.translation import gettext as _
+
 # project
 from db_file_storage.storage import DatabaseFileStorage
 
