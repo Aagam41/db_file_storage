@@ -67,6 +67,8 @@ class DatabaseFileStorage(Storage):
         return final_name
 
     def _get_storage_attributes(self, name):
+        if os.sep != '/':  # Windows fix (see a6d4707) # pragma: no cover
+            name = name.replace('/', os.sep)
         try:
             (
                 model_class_path,
