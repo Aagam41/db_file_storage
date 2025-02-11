@@ -48,6 +48,10 @@ class DatabaseFileStorage(Storage):
         return ContentFile(file_buffer)
 
     def _get_unique_filename(self, model_cls, filename_field, filename):
+        # Also patch the separator upon creation of a file.
+        if os.sep != '/':  # Windows fix (see a6d4707) # pragma: no cover
+            filename = filename.replace('/', os.sep)
+
         final_name = filename
 
         if ('.' in filename.rsplit(os.sep, 1)[-1]):
